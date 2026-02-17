@@ -1,0 +1,44 @@
+# Task taxonomy for SO101 fine-tuning targets
+# Used to tag and filter LeRobot datasets during discovery & curation
+
+tasks:
+  pick_and_place:
+    description: "Grasp object(s) and place at target; stack, reorient, bin transfer"
+    keywords:
+      - pick
+      - place
+      - grasp
+      - put
+      - transfer
+      - stack
+      - cube
+      - object
+    # Optional: map common dataset task strings to this canonical name
+    aliases: [ "pick-place", "pick_and_place", "pick and place" ]
+
+  pour_liquids:
+    description: "Pour from container to container; liquid handling"
+    keywords:
+      - pour
+      - liquid
+      - cup
+      - bottle
+      - water
+    aliases: [ "pour", "pouring" ]
+
+  laundry_folding:
+    description: "Fold towels, cloth; laundry manipulation"
+    keywords:
+      - fold
+      - laundry
+      - towel
+      - cloth
+      - fabric
+    aliases: [ "folding", "laundry", "towel" ]
+
+# Robot identifiers in dataset metadata / descriptions
+robots:
+  so101:
+    names: [ "so101", "so-101", "SO101", "SO-101", "so_101" ]
+  # Other arms we might consider for transfer learning or conversion
+  # compatible_arms: [ "xarm", "aloha", ... ]

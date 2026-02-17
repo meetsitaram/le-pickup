@@ -1,0 +1,3 @@
+# Discovery CSVs and curated manifest go here.
+# discovery_results.csv – output of scripts/discover_lerobot_datasets.py
+# curated_manifest.json – repo_id, task, quality_notes, paths (after curation)

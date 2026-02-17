@@ -1,0 +1,697 @@
+Camera Configuration Summary
+============================================================
+Total datasets: 548
+Unique camera configs: 72
+
+=== 1cam:front (88 datasets, 2,609 episodes) ===
+  4yato/gakushu6  (60 eps)
+  4yato/gakushu3  (40 eps)
+  4yato/gakushu2  (70 eps)
+  4yato/gakushu1  (10 eps)
+  EdwardCHWang/so101_green_cube_vla  (50 eps)
+  EdwardCHWang/record-test-v2  (10 eps)
+  Elvinky/eval_so101_pick_place_bottle_v0_success  (30 eps)
+  Elvinky/eval_so101_pick_place_bottle_v0  (67 eps)
+  Elvinky/so101_pick_place_bottle  (21 eps)
+  Elvinky/so101_pick_place_test  (40 eps)
+  Gopisainath1718/record-test  (25 eps)
+  Greynar/eval_so100  (11 eps)
+  Greynar/record-test  (50 eps)
+  HenryZhang/RFM_human1763747463.9363  (20 eps)
+  HenryZhang/RFM_subopt_recollect1763744785.025841  (20 eps)
+  HenryZhang/RFM_success1763573774.5171869  (20 eps)
+  HenryZhang/RFM_fail1763506194.7428741  (20 eps)
+  Jiminator/record-test2  (50 eps)
+  Jiminator/record-test  (50 eps)
+  Jinny9220/so101_test_v1  (50 eps)
+  Lait-au-pole/so101_test  (51 eps)
+  Monica628/monica_SO101_PickBlock_260121  (10 eps)
+  apal99/so101_test  (25 eps)
+  apal99/record-test-4  (10 eps)
+  apal99/record-test-3  (10 eps)
+  bybifoc/act_so101_test  (25 eps)
+  fw-bot/SO101_pick_up_orange_cube_50  (34 eps)
+  leafsmomo/so101_card_data_v2  (20 eps)
+  leafsmomo/so101_card_data_20  (10 eps)
+  leafsmomo/so101_mydata  (19 eps)
+  leafsmomo/my_so101_dataset_demo  (20 eps)
+  leafsmomo/my_so101_dataset  (10 eps)
+  louis126584/eval_so101_diffusion3  (10 eps)
+  louis126584/so101-test6  (50 eps)
+  louis126584/eval_so101_5r1  (50 eps)
+  louis126584/eval_so101_5r  (50 eps)
+  louis126584/so101-test5  (136 eps)
+  louis126584/so101-test4  (50 eps)
+  louis126584/so101-test3  (50 eps)
+  louis126584/eval_so101_3  (13 eps)
+  louis126584/so101_test  (50 eps)
+  masuzushi28/eval_smolvla_policy-m3  (10 eps)
+  masuzushi28/eval_smolvla_policy-m2  (10 eps)
+  masuzushi28/eval_smolvla_policy-m1  (10 eps)
+  masuzushi28/eval_act_your_dataset  (10 eps)
+  masuzushi28/eval_smolvla_policy-2  (10 eps)
+  masuzushi28/eval_smolvla_policy  (10 eps)
+  masuzushi28/eval_smolvla_policy-m0  (10 eps)
+  mfgcvguy/white_cube_11126  (14 eps)
+  prontjiang/record-gbad  (50 eps)
+  shimazukosen/eval_act_so101_airhockey_0128  (30 eps)
+  shimazukosen/eval_act_so101_airhockey_0127  (30 eps)
+  shimazukosen/act_so101_airhockey_0123_afterdel  (12 eps)
+  shimazukosen/act_so101_airhockey_0123  (13 eps)
+  shimazukosen/eval_act_so101_act_policy_airhockey_1226_pc  (30 eps)
+  shimazukosen/eval_so101_act_policy_airhockey_1226_colab  (30 eps)
+  shimazukosen/so101_airhockey_640x360  (50 eps)
+  shimazukosen/so101_act_policy_airhockey_1226_4  (50 eps)
+  shuhei25/30ep_only_1_feedback4  (30 eps)
+  shuhei25/11ep_only_1_feedback  (11 eps)
+  shuhei25/30ep_only_1_feedback2  (20 eps)
+  shuhei25/VFolding_200_centerleftright_with_feedback  (200 eps)
+  shuhei25/20episode_for_feedback  (20 eps)
+  shuhei25/test_feedback_function_Jan14_temae  (20 eps)
+  shuhei25/eval_leftrightcenter_no_crease_40percent  (11 eps)
+  shuhei25/VTwiceFolding_251206_01  (10 eps)
+  shuhei25/VTwiceFolding_251206_00  (10 eps)
+  shuhei25/VFolding_251206_10  (10 eps)
+  shuhei25/VFolding_251206_09  (10 eps)
+  shuhei25/VFolding_251206_08  (10 eps)
+  shuhei25/VFolding_251206_07  (10 eps)
+  shuhei25/VFolding_251206_06  (10 eps)
+  shuhei25/VFolding_251206_05  (10 eps)
+  shuhei25/VFolding_251206_04  (10 eps)
+  shuhei25/VFolding_251206_03  (10 eps)
+  shuhei25/VFolding_251206_02  (10 eps)
+  shuhei25/VFolding_251206_01  (10 eps)
+  shuhei25/VFolding_251205_00  (10 eps)
+  shuhei25/merged_folding_dataset_1203  (20 eps)
+  HenryZhang/Group10_data_1763157497.2231069  (60 eps)
+  HenryZhang/Group10_data_1763155415.035725  (30 eps)
+  HenryZhang/Group11_data_1763075740.884942  (120 eps)
+  HenryZhang/Group_3_50cmtest1763070175.056042  (30 eps)
+  HenryZhang/Group_3_40cm1763069143.9013388  (30 eps)
+  HenryZhang/Group_3_30cm_1763068016.1770213  (20 eps)
+  HenryZhang/Group_3_20cm_1763067256.3924325  (20 eps)
+  azam2u/dataset_fruitdetection14  (11 eps)
+  bluephysi01/so101_test16  (30 eps)
+
+=== 2cam:top,wrist (44 datasets, 2,848 episodes) ===
+  HenryZhang/RFM_sup_succ_offlineRL_merged_filtered  (75 eps)
+  HenryZhang/rfm_sub_3_task_succ_filtered  (60 eps)
+  HenryZhang/RFM_offlineRL_5_succ_filtered  (15 eps)
+  HenryZhang/RFM_sup_fail_offlineRL_merged_filtered  (120 eps)
+  HenryZhang/RFM_sup_succ_offlineRL_merged_filtered_new  (75 eps)
+  HenryZhang/rfm_sub_3_task_fail1770173650.146896  (45 eps)
+  HenryZhang/rfm_sub_3_task_succ  (60 eps)
+  HenryZhang/RFM_offlineRL_1_succ_30task  (30 eps)
+  HenryZhang/RFM_offlineRL_1_succ_2nd  (10 eps)
+  HenryZhang/RFM_offlineRL_5_fail251769202398.886546  (125 eps)
+  HenryZhang/RFM_offlineRL_5_succ1769207567.8997138  (25 eps)
+  HenryZhang/RFM_offlineRL_1_fail251769202398.886546  (125 eps)
+  HenryZhang/RFM_offlineRL_1_fail1769194818.5427046  (45 eps)
+  HenryZhang/rfm_5_demos1768605063.996896  (50 eps)
+  HenryZhang/RFM_1_demo_close_succ  (10 eps)
+  HenryZhang/RFM_1_demo_failure  (10 eps)
+  HenryZhang/RFM_1_demo_BC  (10 eps)
+  HenryZhang/RFM_1_demo_dataset1766186169.8585718  (10 eps)
+  bluephysi01/e0509_01  (40 eps)
+  bluephysi01/so101_test36  (20 eps)
+  bluephysi01/so101_test35  (10 eps)
+  bluephysi01/so101_test32  (50 eps)
+  bluephysi01/so101_test28  (100 eps)
+  bluephysi01/so101_test31  (100 eps)
+  bluephysi01/so101_test30  (50 eps)
+  bluephysi01/so101_test27  (50 eps)
+  bluephysi01/eval_act_so101_test26  (10 eps)
+  bluephysi01/so101_test26  (50 eps)
+  dboemer/so101-blue-brick-50-episodes  (50 eps)
+  kinghanse/kangsumin_test  (10 eps)
+  mzidan101/in_box0-black_ball  (70 eps)
+  mzidan101/in_box01  (56 eps)
+  prontjiang/record-gbad_2cam_foam  (80 eps)
+  reKaf1T/testmission  (17 eps)
+  roboseasy/classify_color_balls  (120 eps)
+  xhaka3456/cestest  (120 eps)
+  bluephysi01/so101_test25  (20 eps)
+  kevinjosethomas/so101-orange-plate  (50 eps)
+  kinghanse/pick_socks_hs  (145 eps)
+  kinghanse/pick_cube_hs2  (201 eps)
+  kinghanse/pick_cube_hs  (12 eps)
+  kinghanse/pick_cube_jw_2  (300 eps)
+  kinghanse/pick_cube_jw  (202 eps)
+  kinghanse/pick_and_place  (15 eps)
+
+=== 2cam:up,wrist (44 datasets, 4,732 episodes) ===
+  qownscks/act_hoho  (79 eps)
+  qownscks/jihoct_gogo_2  (15 eps)
+  qownscks/jihoct_siq1  (62 eps)
+  qownscks/jihoct  (73 eps)
+  qownscks/song_r_70  (111 eps)
+  qownscks/song_rand_35  (35 eps)
+  qownscks/bae_random_70  (70 eps)
+  qownscks/bae_random27  (27 eps)
+  qownscks/bae_random70  (43 eps)
+  qownscks/jiho_540  (533 eps)
+  qownscks/jiho_16go  (17 eps)
+  qownscks/yangwoosk  (500 eps)
+  qownscks/jiho_14go  (47 eps)
+  qownscks/jiho_12go  (22 eps)
+  qownscks/jiho_first_merge  (165 eps)
+  qownscks/jiho_11go  (14 eps)
+  qownscks/bae_final_1  (453 eps)
+  qownscks/bae_final  (221 eps)
+  qownscks/bae_add3  (145 eps)
+  qownscks/jiho_no2_1  (40 eps)
+  qownscks/jiho_no2  (87 eps)
+  qownscks/bae_add2  (11 eps)
+  qownscks/jiho_final_test  (266 eps)
+  qownscks/jiho_time  (266 eps)
+  qownscks/jiho_gogo  (266 eps)
+  qownscks/jiho_letgo_white  (138 eps)
+  qownscks/jiho_fishtoy_1  (128 eps)
+  qownscks/jiho_letgo_1  (72 eps)
+  qownscks/jiho_letgo  (48 eps)
+  qownscks/bae_fishtoy_1  (232 eps)
+  qownscks/bae_fixed_arm  (10 eps)
+  qownscks/bae_white_111  (111 eps)
+  qownscks/bae_brown_111  (111 eps)
+  qownscks/jiho_first  (59 eps)
+  qownscks/red_bounding_banana  (55 eps)
+  qownscks/qownscks_merge_1  (50 eps)
+  qownscks/merge  (50 eps)
+  qownscks/merged_dataset  (30 eps)
+  qownscks/bottom_right2  (10 eps)
+  qownscks/top_right2  (10 eps)
+  qownscks/banana_center2  (10 eps)
+  qownscks/banana_bottom-left  (10 eps)
+  qownscks/banana_top-left  (10 eps)
+  qownscks/banana_anomoly  (20 eps)
+
+=== 2cam:front,wrist (38 datasets, 3,950 episodes) ===
+  AdithyaRajendran/so101_grab_brain_t2_x10  (2410 eps)
+  AdithyaRajendran/so101_grab_brain_t2  (241 eps)
+  Gukchan/converted_v30_with_video  (50 eps)
+  Gukchan/pickandplace_v30  (50 eps)
+  Gukchan/pickandplace_cube_v3  (50 eps)
+  Piersondong/so101_diffusion_data_v1  (53 eps)
+  Piersondong/so101_dual_cam_diffusion  (72 eps)
+  Quadzilla/eval_so101_v7  (17 eps)
+  Quadzilla/testv1  (20 eps)
+  alizaidi/leisaac-pick-orange  (60 eps)
+  alizaidi/so101-multi-pick-table-13_20260115_171614  (12 eps)
+  alizaidi/so101-multi-pick-merged  (65 eps)
+  alizaidi/so101-extract-cable  (15 eps)
+  alizaidi/so101-multi-pick-table-13_20251228_015404  (13 eps)
+  alizaidi/so101-multi-pick-table-13  (13 eps)
+  andrele/pickup-ring  (50 eps)
+  andrele/eval_so101_act_pickup_ring  (27 eps)
+  arminfg/so101-pick-cube  (83 eps)
+  gainz248ai/eval_so101_ACTLego_40k  (29 eps)
+  gainz248ai/so101_lego_LGbox  (60 eps)
+  gainz248ai/so101_v3.0.1  (25 eps)
+  gainz248ai/so101_v3.0  (10 eps)
+  gpriess/so-101-test-2  (50 eps)
+  infoslack/SO-101-ACT-big  (80 eps)
+  infoslack/SO-101-ACT-test  (10 eps)
+  leafsmomo/so101_card_data_v21  (20 eps)
+  leafsmomo/so101_card_data_v16  (10 eps)
+  leafsmomo/so101_card_data_v15  (20 eps)
+  leafsmomo/so101_card_data_v13  (20 eps)
+  leafsmomo/so101_card_data_v8  (20 eps)
+  mi-kicic/so101_test_orange_pick  (10 eps)
+  prontjiang/record-gbad2  (20 eps)
+  sreetz-nv/so101_teleop_vials_rack_left_real_50  (49 eps)
+  zenbyte/20250126_real_so101_rj45_ep20_cond  (60 eps)
+  zenbyte/DATASET_REPO  (40 eps)
+  zuichucai/so101_flange_box  (50 eps)
+  zuichucai/so101_test1  (56 eps)
+  jadechoghari/record-test  (10 eps)
+
+=== 2cam:ego,external_D455 (31 datasets, 2,336 episodes) ===
+  sreetz-nv/so101_teleop_vials_rack_left_augment_01-02  (89 eps)
+  sreetz-nv/so101_teleop_vials_rack_left_augment_02  (82 eps)
+  sreetz-nv/so101_teleop_vials_rack_left_augment_01  (82 eps)
+  sreetz-nv/so101_teleop_vials_rack_left_sim_and_real  (80 eps)
+  sreetz-nv/so101_teleop_vials_rack_left  (75 eps)
+  sreetz-nv/so101_teleop_vials_to_tray_more_dr_and_cosmos  (81 eps)
+  sreetz-nv/so101_teleop_vials_to_tray_more_dr  (71 eps)
+  sreetz-nv/so101_teleop_vials_to_tray_and_cosmos  (82 eps)
+  sreetz-nv/so101_teleop_vials_to_tray_sim_real_cam_tweak_combined  (77 eps)
+  sreetz-nv/so101_teleop_vials_to_tray_camera_tweak  (72 eps)
+  sreetz-nv/so101_teleop_vials_to_tray_sim_real_combined  (105 eps)
+  sreetz-nv/so101_teleop_vials_to_tray_merged  (100 eps)
+  sreetz-nv/so101_teleop_vials_to_tray_pt2  (50 eps)
+  sreetz-nv/so101_teleop_vials_to_tray_pt1  (50 eps)
+  sreetz-nv/so101_teleop_vials_all_merged_v2  (310 eps)
+  sreetz-nv/so101_teleop_vials_all_merged  (310 eps)
+  sreetz-nv/so101_teleop_vials_merged  (102 eps)
+  sreetz-nv/so101_teleop_vials_pt3  (26 eps)
+  sreetz-nv/so101_teleop_vials_pt4  (25 eps)
+  sreetz-nv/so101_teleop_vials_pt2  (25 eps)
+  sreetz-nv/so101_teleop_vials_pt1  (26 eps)
+  sreetz-nv/so101_teleop_vials_tray_merged  (105 eps)
+  sreetz-nv/so101_teleop_vials_tray_pt3  (25 eps)
+  sreetz-nv/so101_teleop_vials_tray_pt4  (30 eps)
+  sreetz-nv/so101_teleop_vials_tray_pt2  (25 eps)
+  sreetz-nv/so101_teleop_vials_tray_pt1  (25 eps)
+  sreetz-nv/so101_teleop_vials_tray_to_tray_merged  (103 eps)
+  sreetz-nv/so101_teleop_vials_tray_to_tray_pt2  (25 eps)
+  sreetz-nv/so101_teleop_vials_tray_to_tray_pt4  (25 eps)
+  sreetz-nv/so101_teleop_vials_tray_to_tray_pt3  (26 eps)
+  sreetz-nv/so101_teleop_vials_tray_to_tray  (27 eps)
+
+=== 2cam:fixed,handeye (24 datasets, 672 episodes) ===
+  x-haoyu/eval_so101  (11 eps)
+  x-haoyu/PickCube  (50 eps)
+  x-haoyu/record-test  (50 eps)
+  yunfigup/eval_1wood_weights_size_v4  (12 eps)
+  yunfigup/so101_wood_weights_size_v2  (150 eps)
+  yunfigup/so101_wood_weights_size_v1  (50 eps)
+  yunfigup/eval_so101_crescent_block_v2_1  (10 eps)
+  yunfigup/eval_so101_crescent_block_v2  (10 eps)
+  yunfigup/so101_crescent_block_v2  (50 eps)
+  yunfigup/so101_crescent_block_v1  (19 eps)
+  yunfigup/so101_swipe_card_v1  (50 eps)
+  yunfigup/eval_so101_red_logic_v48  (10 eps)
+  yunfigup/eval_so101_red_logic_v41  (10 eps)
+  yunfigup/eval_so101_red_logic_v40  (10 eps)
+  yunfigup/eval_so101_red_logic_v39  (10 eps)
+  yunfigup/eval_so101_red_logic_v38  (10 eps)
+  yunfigup/eval_so101_red_logic_v36  (10 eps)
+  yunfigup/so101_yellow_trash_sort_v1  (50 eps)
+  yunfigup/eval_so101_red_logic_v30  (10 eps)
+  yunfigup/eval_so101_red_logic_v29  (10 eps)
+  yunfigup/eval_so101_red_logic_v27  (10 eps)
+  yunfigup/eval_so101_red_logic_v25  (10 eps)
+  yunfigup/eval_so101_red_logic_v24  (10 eps)
+  yunfigup/so101_red_logic_v1  (50 eps)
+
+=== 1cam:wrist (21 datasets, 1,151 episodes) ===
+  Gukchan/so101_test_0113_wrist_only_img_change  (50 eps)
+  Gukchan/so101_test_0113_wrist_only  (50 eps)
+  Gukchan/pick_redcube_and_place_greenpaper  (50 eps)
+  Gukchan/record-test  (50 eps)
+  Piersondong/so101_wrist_two_objects_v1  (50 eps)
+  Piersondong/eval_act_wrist_test  (10 eps)
+  Piersondong/so101_wrist_only_50ep  (50 eps)
+  aShunSasaki/so101_pp_blue_box_k_03  (50 eps)
+  aShunSasaki/so101_pp_blue_box_k_01  (50 eps)
+  aShunSasaki/so101_pp_blue_box_v_02  (200 eps)
+  aShunSasaki/so101_pp_blue_box  (52 eps)
+  boat1470/record-test  (50 eps)
+  helloworld26/so101_pick_place_arm_camera  (50 eps)
+  kimyeji/tuna_blue  (101 eps)
+  kimyeji/tuna  (45 eps)
+  kinghanse/pick_lego_test  (10 eps)
+  kinghanse/pick_and_place_50epi  (51 eps)
+  songzybong/record-test  (30 eps)
+  vladimirmodylevskii/so100_test_multicam_v1  (50 eps)
+  vladimirmodylevskii/so100_grab_object_v2  (52 eps)
+  vladimirmodylevskii/so100_grab_object_1  (50 eps)
+
+=== 2cam:external,wrist (19 datasets, 564 episodes) ===
+  dureduck/eval_so100_act_1109_lp_2loc_5x4_20samples_b32_left_10trials  (10 eps)
+  dureduck/eval_so100_act_1109_lp_2loc_5x4_20samples_b32_right_10trials  (10 eps)
+  dureduck/eval_so100_act_1109_lp_2loc_5x4_20samples_b16_20trials  (20 eps)
+  dureduck/eval_so100_act_1109_lp_2loc_5x4_20samples_b8_20trials  (20 eps)
+  dureduck/lp_2loc_5x4_20samples  (20 eps)
+  dureduck/eval_so100_act_1109_lp_1loc_5x4_b32_10trials  (10 eps)
+  dureduck/eval_so100_act_1109_lp_1loc_5x4_b16_10trials  (10 eps)
+  dureduck/eval_so100_act_1109_lp_1loc_5x4_b8_10trials  (10 eps)
+  dureduck/lp_1loc_5x4_10samples  (10 eps)
+  dureduck/eval_so100_act_1104_5x4x3_grid  (10 eps)
+  dureduck/eval_so100_act_1106_5x4x3_20samples  (20 eps)
+  dureduck/lp_dense_5x4_random_50samples  (50 eps)
+  dureduck/eval_so100_act_1105_9x7x3_20samples  (20 eps)
+  dureduck/eval_so100_1105_first_test  (11 eps)
+  dureduck/lp_9x7_grid_three_each  (189 eps)
+  dureduck/lp_5x4_grid_three_each  (60 eps)
+  dureduck/lp_3x4_grid_three_each  (36 eps)
+  dureduck/lift_place_3x4_grid_three_each  (36 eps)
+  dureduck/lift_place_3x4_grid_one_each  (12 eps)
+
+=== 2cam:front,side (17 datasets, 1,013 episodes) ===
+  4yato/gakushu5.1  (40 eps)
+  4yato/gakushu5  (21 eps)
+  AARYA-G/record-test  (56 eps)
+  AARYA-G/project  (56 eps)
+  SerhiiShuruta/so101_grab_yellow_cube_to_cart  (30 eps)
+  SerhiiShuruta/so101_yellow_cube_grab_clean  (170 eps)
+  SerhiiShuruta/so101_yellow_cube_grab_cam_pose_2  (41 eps)
+  SerhiiShuruta/so101_yellow_cube_grab  (201 eps)
+  arminfg/pickup_redtogreen  (26 eps)
+  doldolee/record-test  (10 eps)
+  roboseasy/pick_and_place_total  (121 eps)
+  roboseasy/pick_and_place_total1  (80 eps)
+  roboseasy/pick_and_place  (60 eps)
+  vanekger/eval_so101_scotch_move_v3  (27 eps)
+  vanekger/so101_pick_scotch_move_end_v1  (30 eps)
+  vanekger/so101_pick_scotch_v1  (23 eps)
+  sapanostic/pen-placement-official  (21 eps)
+
+=== 2cam:camera1,camera2 (17 datasets, 1,030 episodes) ===
+  doldolee/eval_smolvla_ppcc_0211  (10 eps)
+  doldolee/eval_smolvla_ppcc_0210  (10 eps)
+  doldolee/eval_smolvla_0203_test  (10 eps)
+  dtakehara/so101_v042_12  (50 eps)
+  dtakehara/so101_v042_11  (50 eps)
+  dtakehara/so101_v042_10  (60 eps)
+  dtakehara/so101_v042_05  (42 eps)
+  dtakehara/so101_v042_04  (52 eps)
+  dtakehara/so101_v042_03  (31 eps)
+  dtakehara/so101_v042_02  (50 eps)
+  dtakehara/so101_v042_01  (50 eps)
+  grahamwichhh/eval_v2_so101_lego-to-mug_50ep  (50 eps)
+  infoslack/SO-101-SMOLVLA-500  (202 eps)
+  infoslack/SO-101-SMOLVLA-BIG  (250 eps)
+  kheyal/eval_so101_test  (12 eps)
+  kinghanse/pick_the_red_color_cube_and_place_red_zone  (51 eps)
+  kissyour/my_smolvla_test02  (50 eps)
+
+=== 2cam:top_cam,wrist_cam (17 datasets, 934 episodes) ===
+  jonathm126/eval_so101_car_pick_and_place_96_episodes_v0_real_v0  (157 eps)
+  jonathm126/eval_so101_car_pick_and_place-96_episodes_v0-real_v0  (115 eps)
+  jonathm126/eval_so101_pick_pen_v5_real_v0  (20 eps)
+  jonathm126/eval_so101_pick_pen_v4_real_v0  (81 eps)
+  jonathm126/eval_so101_pick_pen_25_episodes_v0_real_v0  (20 eps)
+  jonathm126/eval_so101_pick_pen_v3_real_v0  (20 eps)
+  jonathm126/eval_so101_car_pick_and_place_96_episodes_v1_real_v0  (24 eps)
+  jonathm126/eval_so101_car_pick_and_place_25_episodes_v0_real_v0  (24 eps)
+  jonathm126/eval_so101_car_pick_and_place_50_episodes_v4_real_v0  (24 eps)
+  jonathm126/so101_pick_pen  (76 eps)
+  jonathm126/so101_car_pick_and_place-bbox  (98 eps)
+  jonathm126/so101_car_pick_and_place  (98 eps)
+  jonathm126/so101_pick_pen-bbox  (51 eps)
+  jonathm126/eval_so101_pick_pen-v0-real_v0  (19 eps)
+  jonathm126/eval_so101_car_pick_and_place-bbox_yolo_v1-real_v0  (24 eps)
+  jonathm126/eval_so101_car_pick_and_place-bbox_yolo_v0-real_v0  (25 eps)
+  jonathm126/eval_so101_car_pick_and_place_50_episodes_v2_12_test_case  (58 eps)
+
+=== 4cam:exo_depth,exo_rgb,wrist_depth,wrist_rgb (13 datasets, 526 episodes) ===
+  7alexzhang7/eval_turn-h-wrench-to-left-hard-diffusion-new-5090  (20 eps)
+  7alexzhang7/eval_turn-turnwheel-to-left-hard-diffusion-new  (20 eps)
+  7alexzhang7/turn-turnwheel-to-left-hard  (50 eps)
+  7alexzhang7/eval_turn-door-handle-to-left-hard-diffusion-new  (20 eps)
+  7alexzhang7/door-handle-turn-left-hard  (50 eps)
+  7alexzhang7/h-wrench-turn-left-hard  (50 eps)
+  7alexzhang7/eval_turn_quarter-lever-to-left-hard-diffusion-new  (21 eps)
+  7alexzhang7/quarter-lever-turn-left-light  (50 eps)
+  7alexzhang7/quarter-lever-turn-left-hard  (50 eps)
+  7alexzhang7/eval_so101-turn-quarter-lever-to-left-light-diffusion  (20 eps)
+  7alexzhang7/quarter-lever-to-left-light  (50 eps)
+  7alexzhang7/so101-turn-lever-right-to-left-max-fov  (50 eps)
+  7alexzhang7/so101-turn-steve-lever-right-to-left  (75 eps)
+
+=== 2cam:front,gripper (10 datasets, 225 episodes) ===
+  GonzoBop/SO-101-ACT-test0-20260125-152006  (50 eps)
+  dandantangpopo/record-202602125  (20 eps)
+  dandantangpopo/record-20251231  (10 eps)
+  dandantangpopo/record-20251229-PM  (25 eps)
+  dandantangpopo/merged-20251229AM2  (40 eps)
+  dandantangpopo/merged-20251229AM  (40 eps)
+  dandantangpopo/record-20251229-3  (10 eps)
+  dandantangpopo/record-20251229-2  (10 eps)
+  dandantangpopo/record-20251229-1  (10 eps)
+  dandantangpopo/record-20251228  (10 eps)
+
+=== 2cam:side,top (9 datasets, 301 episodes) ===
+  aDaikiKamata/eval_smolvla_so101_pp_donuts_random_donut_pos_varied  (12 eps)
+  aDaikiKamata/eval_smolvla_so101_pp_donuts  (10 eps)
+  aDaikiKamata/so101_pp_donuts_v1  (25 eps)
+  doldolee/pick_and_place_cleaning_cloth_0210  (40 eps)
+  doldolee/smolvla_traj_0131  (40 eps)
+  faye7/so101-data2  (55 eps)
+  gannbayar/so101_sorting_2cam  (49 eps)
+  mcres/svla_so101_pickplace  (50 eps)
+  bluephysi01/so101_test19  (20 eps)
+
+=== 3cam:left_left,left_top,right_right (9 datasets, 545 episodes) ===
+  bluephysi01/hackathon_05  (200 eps)
+  bluephysi01/hackathon_04  (50 eps)
+  bluephysi01/hackathon_03  (10 eps)
+  bluephysi01/hackathon_02  (10 eps)
+  bluephysi01/hackathon_01  (10 eps)
+  bluephysi01/so101_test43  (75 eps)
+  bluephysi01/so101_test42  (90 eps)
+  bluephysi01/so101_test40  (50 eps)
+  bluephysi01/so101_test39  (50 eps)
+
+=== 2cam:front,top (8 datasets, 229 episodes) ===
+  DriversMore/pruebaHaribo  (33 eps)
+  Pinguin01TG/record-test24  (37 eps)
+  dokans/record-test35  (57 eps)
+  dokans/record-test31  (10 eps)
+  dokans/record-test34  (38 eps)
+  dokans/record-test29  (25 eps)
+  dokans/record-test14  (19 eps)
+  juyoungggg/lerobot-dataset  (10 eps)
+
+=== 3cam:side,top,wrist (8 datasets, 272 episodes) ===
+  GonzoBop/SO-101-ACT-pick-and-place  (10 eps)
+  bluephysi01/so101_test29  (50 eps)
+  gannbayar/so101_sorting_3cam_480p_cropped_resized  (51 eps)
+  gannbayar/so101_sorting_3cam_480p  (51 eps)
+  bluephysi01/so101_test23  (30 eps)
+  bluephysi01/so101_test22  (30 eps)
+  bluephysi01/so101_test21  (20 eps)
+  bluephysi01/so101_test20  (30 eps)
+
+=== 3cam:shoulder_base_wide_view,workspace_variable_view,wrist_roll_top_down (8 datasets, 329 episodes) ===
+  anjalidhabaria/pour_coke_merged_v3  (90 eps)
+  anjalidhabaria/pour_coke_static_perturbate  (90 eps)
+  anjalidhabaria/pour_coke_perturbate_target  (20 eps)
+  anjalidhabaria/pour_coke_perturbate_source  (20 eps)
+  anjalidhabaria/pour_negative  (33 eps)
+  anjalidhabaria/pour_coke_static  (50 eps)
+  anjalidhabaria/pick_and_place_tapes_16_episodes  (16 eps)
+  anjalidhabaria/pick_and_place_tapes_15hz  (10 eps)
+
+=== 2cam:left,right (8 datasets, 800 episodes) ===
+  xhaka3456/so100_pick_red_1027_demo_v4  (125 eps)
+  xhaka3456/so100_pick_red_1027_demo_v3  (125 eps)
+  xhaka3456/so100_pick_red_1027_demo_v2  (125 eps)
+  xhaka3456/so100_pick_red_1027_demo_fixed  (125 eps)
+  xhaka3456/so100_pick_red_1027_demo  (125 eps)
+  xhaka3456/so100_pick_red_1017  (110 eps)
+  xhaka3456/so100_pick_red_1016  (35 eps)
+  xhaka3456/so100_pick_red  (30 eps)
+
+=== 1cam:camera1 (7 datasets, 570 episodes) ===
+  aShunSasaki/eval_so101_pp_blue_box_w_a2_eq_policy_01_test_01  (120 eps)
+  kinghanse/RedCube_OtherCube_100epi  (100 eps)
+  kinghanse/RedCube_OtherCube_50epi  (50 eps)
+  kinghanse/place_on_blue_cock  (100 eps)
+  kinghanse/place_on_purple_paper  (100 eps)
+  kinghanse/place_on_gray_cube  (50 eps)
+  kinghanse/place_on_red_cube  (50 eps)
+
+=== 2cam:overhead,wrist (7 datasets, 253 episodes) ===
+  helloworld26/so101_pick_place_2cam  (53 eps)
+  RyutaroMurayama/3dice  (40 eps)
+  RyutaroMurayama/1dice  (20 eps)
+  RyutaroMurayama/record-test  (10 eps)
+  samarthmahapatra/grey-plushie-pickup  (30 eps)
+  samarthmahapatra/sponge-trash-starting  (50 eps)
+  samarthmahapatra/sponge-trash  (50 eps)
+
+=== 3cam:front,left,right (7 datasets, 437 episodes) ===
+  xhaka3456/aisummitdelhi_test  (41 eps)
+  xhaka3456/ucsandiego  (40 eps)
+  xhaka3456/thundercommtest2  (80 eps)
+  xhaka3456/thundercommtest1  (30 eps)
+  xhaka3456/qualcomm  (99 eps)
+  xhaka3456/ces  (130 eps)
+  xhaka3456/xlerobot_test4  (17 eps)
+
+=== 3cam:left,right,wrist (6 datasets, 269 episodes) ===
+  sapanostic/so101_pick_cube_v2.0  (50 eps)
+  sapanostic/so101_pick_cube_v2.01  (50 eps)
+  zenbyte/20260213_real_so101_rj45_ep20_cond_2_switch_task_3cam  (40 eps)
+  zenbyte/20250208_real_so101_rj45_ep20_cond_2_switch_task_3cam  (29 eps)
+  zenbyte/20250206_real_so101_rj45_ep20_cond_2_switch_task_3cam  (40 eps)
+  zenbyte/20250126_real_so101_rj45_ep20_cond_3task_3cam  (60 eps)
+
+=== 3cam:camera0,camera2,camera3 (6 datasets, 212 episodes) ===
+  sriharsha4444/so-101-pick-and-place-10  (20 eps)
+  sriharsha4444/so-101-pick-and-place-7  (20 eps)
+  sriharsha4444/so-101-pick-and-place-6  (60 eps)
+  sriharsha4444/so-101-pick-and-place-5  (80 eps)
+  sriharsha4444/so-101-pick-and-place-4  (20 eps)
+  sriharsha4444/so-101-pick-and-place-1  (12 eps)
+
+=== 1cam:top (5 datasets, 70 episodes) ===
+  CursedRock17/so101_block_onecam  (25 eps)
+  kageee/so101_eraser_cup_main  (15 eps)
+  kageee/eval_so101_eraser_cup  (10 eps)
+  kageee/so101_eraser_cup  (10 eps)
+  kinghanse/HS_nut1  (10 eps)
+
+=== 2cam:side,up (5 datasets, 250 episodes) ===
+  jadechoghari/pgen-annotations  (50 eps)
+  jadechoghari/lerobot-pgen-svla  (50 eps)
+  jadechoghari/lerobot-tasks  (50 eps)
+  kissyour/so101-test02  (50 eps)
+  mfgcvguy/svla_so101_pickplace  (50 eps)
+
+=== 2cam:front0,front1 (5 datasets, 307 episodes) ===
+  yuta0x89/record-test-1130-04-no21-1121-05  (112 eps)
+  yuta0x89/record-test-1130-04-no21  (62 eps)
+  yuta0x89/record-test-1130-04  (63 eps)
+  yuta0x89/record-test-1130-03  (20 eps)
+  yuta0x89/record-test-1121-05  (50 eps)
+
+=== 2cam:arm,front (3 datasets, 110 episodes) ===
+  brukg07/so100  (10 eps)
+  dctian/record-test-4  (50 eps)
+  dctian/record-test-3  (50 eps)
+
+=== 2cam:base_0_rgb,left_wrist_0_rgb (3 datasets, 70 episodes) ===
+  danbhf/move_the_block_from_the_left_o_20251124_233735  (50 eps)
+  danbhf/pick_place_training_20251123_141805  (10 eps)
+  danbhf/pick_place_training_20251115_232405  (10 eps)
+
+=== 3cam:cam_side_view,cam_top_view,cam_wrist_view (3 datasets, 198 episodes) ===
+  dpak0724/so101_three_cam_combined  (99 eps)
+  dpak0724/so101_three_cam_test  (50 eps)
+  dpak0724/so101_three_cam_v2  (49 eps)
+
+=== 1cam:laptop (3 datasets, 65 episodes) ===
+  leafsmomo/demo3  (20 eps)
+  vanekger/so101_pick_places_v1  (30 eps)
+  vanekger/so101_pick_v5  (15 eps)
+
+=== 2cam:ego,external (3 datasets, 66 episodes) ===
+  sreetz-nv/so101_teleop_vials_alt  (22 eps)
+  sreetz-nv/so101_teleop_vials  (23 eps)
+  sreetz-nv/so101_teleop_ring_stack  (21 eps)
+
+=== 2cam:camera2,camera3 (3 datasets, 156 episodes) ===
+  sriharsha4444/so-101-pick-and-place-val-9  (34 eps)
+  sriharsha4444/so-101-pick-and-place-9  (102 eps)
+  sriharsha4444/so-101-pick-and-place-8  (20 eps)
+
+=== 1cam:up (3 datasets, 90 episodes) ===
+  azam2u/data_orange  (30 eps)
+  azam2u/data_apple  (30 eps)
+  azam2u/data_banana4  (30 eps)
+
+=== 3cam:global,top,wrist (2 datasets, 58 episodes) ===
+  Charlieisme/data022_cleaned  (48 eps)
+  Charlieisme/eval_so101_multicam_v23  (10 eps)
+
+=== 1cam:left (2 datasets, 78 episodes) ===
+  Lait-au-pole/eval_so101  (13 eps)
+  Lait-au-pole/so101_test_480  (65 eps)
+
+=== 2cam:robot,top (2 datasets, 100 episodes) ===
+  Pinguin01TG/record-test12  (50 eps)
+  Pinguin01TG/record-test11  (50 eps)
+
+=== 2cam:all,front (2 datasets, 65 episodes) ===
+  bestak/so101-banana-grab-and-place-40  (40 eps)
+  bestak/so101-reach-cup2  (25 eps)
+
+=== 2cam:laptop,phone (2 datasets, 60 episodes) ===
+  martonbodo/record-train-good  (50 eps)
+  martonbodo/record-train  (10 eps)
+
+=== 2cam:side,wrist (2 datasets, 111 episodes) ===
+  sapanostic/pen-placement-task  (101 eps)
+  sapanostic/pen-placement-home  (10 eps)
+
+=== 2cam:external,gripper (2 datasets, 60 episodes) ===
+  sreetz-nv/so101_vial_pickup_simple_real  (40 eps)
+  sreetz-nv/so101_teleop_vials_lightbox_real  (20 eps)
+
+=== 2cam:gripper,iphone (2 datasets, 34 episodes) ===
+  tilmannb/so101_grab_package_simple  (10 eps)
+  tilmannb/so101_grab_package  (24 eps)
+
+=== 1cam:overhead (1 datasets, 10 episodes) ===
+  AkshuAriga/so101_screwdriver_plate_v2  (10 eps)
+
+=== 3cam:bottom,gripper,top (1 datasets, 20 episodes) ===
+  Artemzlx/so101-cube-test  (20 eps)
+
+=== 2cam:base,wrist.top (1 datasets, 50 episodes) ===
+  CursedRock17/so101_two_cam  (50 eps)
+
+=== 2cam:wrist.base,wrist.top (1 datasets, 50 episodes) ===
+  CursedRock17/so101_arms_usmsm  (50 eps)
+
+=== 2cam:front,obs (1 datasets, 10 episodes) ===
+  GonzoBop/SO-101-ACT-new  (10 eps)
+
+=== 3cam:front,gripper,top (1 datasets, 64 episodes) ===
+  JarneVdHDM/grab-mentos-3cam  (64 eps)
+
+=== 2cam:gripper,top (1 datasets, 51 episodes) ===
+  JarneVdHDM/grab-mentos  (51 eps)
+
+=== 2cam:left.left,left.right (1 datasets, 131 episodes) ===
+  Lait-au-pole/so101_stereovision  (131 eps)
+
+=== 2cam:Top,side (1 datasets, 30 episodes) ===
+  YW0708/svla_test  (30 eps)
+
+=== 2cam:cam_side_view,cam_top_view (1 datasets, 50 episodes) ===
+  dpak0724/so101_two_cam_test  (50 eps)
+
+=== 1cam:cam_c922 (1 datasets, 30 episodes) ===
+  dpak0724/so101_test_dataset  (30 eps)
+
+=== 4cam:side0,side45,top,wrist (1 datasets, 50 episodes) ===
+  grahamwichhh/eval_so101_lego-to-mug_50ep  (50 eps)
+
+=== 1cam:top_cam (1 datasets, 11 episodes) ===
+  jonathm126/eval_so101_car_pick_and_place-bbox_yolo_v2-real_v0  (11 eps)
+
+=== 2cam:bov,wrist (1 datasets, 100 episodes) ===
+  k0i5hi/grab_the_eraser  (100 eps)
+
+=== 2cam:left_camera1,right_wrist (1 datasets, 41 episodes) ===
+  kinghanse/pick_pack  (41 eps)
+
+=== 1cam:left_front (1 datasets, 20 episodes) ===
+  leafsmomo/bimanual-so101-dataset  (20 eps)
+
+=== 3cam:belly,top,wrist (1 datasets, 50 episodes) ===
+  mega-joanne/pick-and-place  (50 eps)
+
+=== 2cam:base,overhead (1 datasets, 50 episodes) ===
+  mercu7/50-patty-record  (50 eps)
+
+=== 3cam:front,side,top (1 datasets, 50 episodes) ===
+  mi-kicic/so101_ds2  (50 eps)
+
+=== 3cam:camera1,camera2,camera3 (1 datasets, 20 episodes) ===
+  pshingavi/first-20-so101_5  (20 eps)
+
+=== 3cam:front,top,wrist (1 datasets, 28 episodes) ===
+  sapanostic/so101_offline_eval  (28 eps)
+
+=== 1cam:side (1 datasets, 50 episodes) ===
+  taomon/so101_pick_green_dish  (50 eps)
+
+=== 3cam:left,left_wrist,right (1 datasets, 82 episodes) ===
+  xhaka3456/bi_so101_screw_the_cap_on3  (82 eps)
+
+=== 4cam:front,left,left_wrist,right (1 datasets, 22 episodes) ===
+  xhaka3456/bi_so101_screw_the_cap_on  (22 eps)
+
+=== 0cam:none (1 datasets, 33 episodes) ===
+  xhaka3456/bi_so101_screw_the_cap_on2  (33 eps)
+
+=== 3cam:front,left,rigth (1 datasets, 169 episodes) ===
+  xhaka3456/bi_so101_pick_dolls_demo  (169 eps)
+
+=== 3cam:bird,left,right (1 datasets, 20 episodes) ===
+  PID0930/so101-dual-handkercheif_ver4  (20 eps)
+
+=== 2cam:front,up (1 datasets, 50 episodes) ===
+  azam2u/data_18-9  (50 eps)
+
+=== 3cam:left,right,top (1 datasets, 20 episodes) ===
+  bluephysi01/so101_test34  (20 eps)
+
+=== 2cam:camera1,wrist (1 datasets, 40 episodes) ===
+  kinghanse/pick_blueball_dualarm  (40 eps)
+

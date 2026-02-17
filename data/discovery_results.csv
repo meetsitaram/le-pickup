@@ -1,0 +1,101 @@
+repo_id,author,downloads,likes,description,so101_mentioned,is_eval_like,task_pick_and_place,task_pour_liquids,task_laundry_folding,best_task,best_task_score,total_task_score,num_episodes,author_has_eval
+physical-intelligence/libero,physical-intelligence,22008,60,This dataset was created using LeRobot. Dataset Description This dataset combines four individual Libero datasets: Libero-Spatial  Libero-Object  Libero-Goal and Libero-10. All datasets were taken fro,False,False,1,0,0,pick_and_place,1,1,,False
+lerobot/pusht,lerobot,7262,44,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+yaak-ai/L2D,yaak-ai,19682,43,TL;DR of L2D  the world's largest self-driving dataset! Read more about L2D on the official Huggingface blog: LeRobot goes to driving school 90+ TeraBytes of multimodal data (5000+ hours of driving) f,False,False,0,0,0,pick_and_place,0,0,,False
+behavior-1k/2025-challenge-demos,behavior-1k,148923,31,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+HuggingFaceVLA/libero,HuggingFaceVLA,13275,31,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+youliangtan/so101-table-cleanup,youliangtan,1616,28,This dataset was created using LeRobot.,True,False,0,0,0,pick_and_place,0,0,,False
+lerobot/svla_so101_pickplace,lerobot,1430,24,This dataset was created using LeRobot.,True,False,2,0,0,pick_and_place,2,2,,False
+cadene/droid_1.0.1,cadene,235910,16,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/metaworld_mt50,lerobot,4288,14,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+unitreerobotics/G1_Clean_Table,unitreerobotics,751,14,This dataset was created using LeRobot. Due to the inability to precisely describe spatial positions  adjust the scene to closely match the first frame of the dataset after installing the hardware as ,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_sim_insertion_human,lerobot,4088,12,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+IPEC-COMMUNITY/fractal20220817_data_lerobot,IPEC-COMMUNITY,196757,12,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+IPEC-COMMUNITY/bridge_orig_lerobot,IPEC-COMMUNITY,243631,12,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+cadene/droid,cadene,343173,11,This dataset was created using LeRobot. DROID: A Large-Scale In-the-Wild Robot Manipulation Dataset One of the biggest open-source dataset for robotics with 27.044 326 frames  92 223 episodes  31 308 ,False,False,0,0,0,pick_and_place,0,0,,False
+OpenDriveLab-org/Kai0,OpenDriveLab-org,6383,11,KAI0 TODO The advantage label will be coming soon. Contents About the Dataset Load the Dataset Download the Dataset,False,False,0,0,1,laundry_folding,1,1,,False
+lerobot/svla_so100_sorting,lerobot,229,10,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/droid_1.0.1,lerobot,10481,10,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_sim_transfer_cube_human,lerobot,4433,9,This dataset was created using LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+lerobot/aloha_mobile_cabinet,lerobot,1691,9,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/droid_100,lerobot,1475,9,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+IPEC-COMMUNITY/droid_lerobot,IPEC-COMMUNITY,434012,9,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_static_cups_open,lerobot,3561,8,This dataset was created using LeRobot.,False,False,0,1,0,pour_liquids,1,1,,False
+danaaubakirova/koch_test,danaaubakirova,350,7,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+physical-intelligence/aloha_pen_uncap_diverse,physical-intelligence,773,7,This dataset was created using LeRobot. Dataset Description This dataset is a lerobot conversion of the aloha_pen_uncap_diverse subset of BiPlay. BiPlay contains 9.7 hours of bimanual data collected w,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_sim_transfer_cube_scripted,lerobot,3172,6,This dataset was created using LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+lerobot/pusht_image,lerobot,3591,6,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+dunnolab/so-combined-eng,dunnolab,4780,6,This dataset was created using LeRobot. Dataset Description The English version of this dataset integrates 598 open-source community datasets into a single unified corpus  comprising 22 709 episodes a,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_sim_insertion_scripted,lerobot,3381,5,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_static_coffee,lerobot,660,5,This dataset was created using LeRobot.,False,False,0,1,0,pour_liquids,1,1,,False
+yaak-ai/lerobot-driving-school,yaak-ai,37,5,Lerobot goes to driving school This dataset was created using LeRobot. Dataset Description Homepage: https://www.yaak.ai/blog/a-novel-test-for-autonomy Paper: https://www.yaak.ai/blog/next-action-pred,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/libero_spatial_image,lerobot,660,5,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+unitreerobotics/Z1_StackBox_Dataset,unitreerobotics,338,5,This dataset was created using LeRobot.,False,False,1,0,0,pick_and_place,1,1,,False
+lerobot/xvla-soft-fold,lerobot,730,5,This dataset was created using LeRobot. Dataset Description Repository: X-VLA License: Apache 2.0 Paper: Zheng et al.  2025  “X-VLA: Soft-Prompted Transformer as Scalable Cross-Embodiment Vision-Langu,False,False,0,0,1,laundry_folding,1,1,,False
+lerobot/umi_cup_in_the_wild,lerobot,398,4,This dataset was created using LeRobot.,False,False,0,1,0,pour_liquids,1,1,,False
+lerobot/utokyo_pr2_tabletop_manipulation,lerobot,724,4,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/berkeley_autolab_ur5,lerobot,1232,4,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+yaak-ai/L2D-v3,yaak-ai,940,4,This dataset was created using LeRobot. This is a release R2 (10K episodses) of yaak-ai/L2D in LeRobot Dataset V3 format. R3 release of 100K episode is now available here in LeRobotDataset V3 format.,False,False,0,0,0,pick_and_place,0,0,,False
+unitreerobotics/G1_Dex3_ObjectPlacement_Dataset,unitreerobotics,86,4,This dataset was created using LeRobot. Due to the inability to precisely describe spatial positions  adjust the scene to closely match the first frame of the dataset after installing the hardware as ,False,False,2,0,0,pick_and_place,2,2,,False
+lerobot/libero_goal_image,lerobot,890,4,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+youliangtan/so100_strawberry_grape,youliangtan,162,4,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/svla_so100_pickplace,lerobot,1299,4,This dataset was created using LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+unitreerobotics/Z1_Dual_Dex1_StackBox_Dataset,unitreerobotics,96,4,This dataset was created using LeRobot.,False,False,1,0,0,pick_and_place,1,1,,False
+nikriz/aopoli-lv-libero_combined_no_noops_lerobot_v21,nikriz,13,4,This dataset was created using LeRobot. Dataset Description Combined version of following lerobot datasets aopolin-lv/libero_spatial_no_noops_lerobot_v21 aopolin-lv/libero_object_no_noops_lerobot_v21 ,False,False,1,0,0,pick_and_place,1,1,,False
+pollen-robotics/pick_and_place_bottle,pollen-robotics,53,4,This dataset was created using LeRobot.,False,False,2,1,0,pick_and_place,2,3,,False
+whosricky/so101-megamix-v1,whosricky,15,4,This dataset was created using LeRobot.,True,False,0,0,0,pick_and_place,0,0,,False
+lerobot-data-collection/level1_rac2_rtc_s4_1,lerobot-data-collection,47,4,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/libero_10,lerobot,825,4,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+unitreerobotics/G1_Stack_Block,unitreerobotics,499,4,This dataset was created using LeRobot. Due to the inability to precisely describe spatial positions  adjust the scene to closely match the first frame of the dataset after installing the hardware as ,False,False,1,0,0,pick_and_place,1,1,,False
+lerobot/libero_10_subtask,lerobot,131,4,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+anjalidhabaria/pour_coke_static,anjalidhabaria,86,4,This dataset was created using LeRobot.,True,False,0,1,0,pour_liquids,1,1,,False
+lerobot/aloha_mobile_shrimp,lerobot,780,3,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+AdamLucek/koch_block,AdamLucek,4,3,Dataset used to train AdamLucek/act_koch_block This dataset was created using 🤗 LeRobot. Details around methodology for set up  training  and evaluation available via LeRobot's guide to Getting Starte,False,True,0,0,0,pick_and_place,0,0,,True
+unitreerobotics/G1_Dex3_ToastedBread_Dataset,unitreerobotics,487,3,This dataset was created using LeRobot. Due to the inability to precisely describe spatial positions  adjust the scene to closely match the first frame of the dataset after installing the hardware as ,False,False,0,0,0,pick_and_place,0,0,,False
+Felix-Zhenghao/libero-10-lerobot,Felix-Zhenghao,1470,3,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+cadene/droid_1.0.1_v30,cadene,1160,3,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+microsoft/echelon-original-eef-main_right_wrist,microsoft,33,3,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/svla_so100_stacking,lerobot,489,3,This dataset was created using LeRobot.,False,False,1,0,0,pick_and_place,1,1,,False
+aractingi/droid_1.0.1,aractingi,2873,3,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+frodobots/berkeley-frodobots-lerobot-7k,frodobots,753,3,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+NONHUMAN-RESEARCH/pick-and-place-fruits-v2-test,NONHUMAN-RESEARCH,27,3,This dataset was created using LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+komokomo7/cranex7_gc_off20251223_003825,komokomo7,3,3,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+binhng/robocasa_merged_24_tasks_100demos_v1,binhng,6007,3,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/libero,lerobot,4191,3,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+unitreerobotics/G1_Wipe_Table,unitreerobotics,525,3,This dataset was created using LeRobot. Due to the inability to precisely describe spatial positions  adjust the scene to closely match the first frame of the dataset after installing the hardware as ,False,False,0,0,0,pick_and_place,0,0,,False
+kissyour/eval_act_your_dataset,kissyour,20,3,This dataset was created using LeRobot.,False,True,0,0,0,pick_and_place,0,0,,True
+lerobot/xarm_lift_medium,lerobot,4310,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/xarm_push_medium_replay,lerobot,1626,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_static_screw_driver,lerobot,442,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_mobile_wipe_wine,lerobot,761,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_static_towel,lerobot,1148,2,This dataset was created using LeRobot.,False,False,0,0,1,laundry_folding,1,1,,False
+lerobot/aloha_static_ziploc_slide,lerobot,577,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_static_coffee_new,lerobot,366,2,This dataset was created using LeRobot.,False,False,0,1,0,pour_liquids,1,1,,False
+lerobot/aloha_sim_insertion_scripted_image,lerobot,2420,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/aloha_sim_transfer_cube_human_image,lerobot,2391,2,This dataset was created using LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+lerobot/unitreeh1_fold_clothes,lerobot,322,2,This dataset was created using LeRobot.,False,False,0,0,2,laundry_folding,2,2,,False
+lerobot/utokyo_xarm_bimanual,lerobot,345,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/koch_pick_place_5_lego,lerobot,10,2,This dataset was created using 🤗 LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+lerobot/stanford_robocook,lerobot,2245,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/fmb,lerobot,759,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+aliberts/koch_tutorial,aliberts,1312,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+jackvial/koch_pick_and_place_pistachio_1_e10,jackvial,2,2,This dataset was created using 🤗 LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+jackvial/koch_pick_and_place_pistachio_8_e100,jackvial,9,2,This dataset was created using 🤗 LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+jackvial/koch_pick_and_place_pistachio_10_e20,jackvial,3,2,This dataset was created using 🤗 LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+jackvial/koch_pick_and_place_pistachio_11_e20,jackvial,1,2,This dataset was created using 🤗 LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+lerobot/taco_play,lerobot,3729,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/berkeley_gnm_cory_hall,lerobot,3972,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+cadene/koch_bimanual_folding,cadene,581,2,This dataset was created using 🤗 LeRobot.,False,False,0,0,1,laundry_folding,1,1,,False
+villekuosmanen/pick_up_lid,villekuosmanen,10,2,This dataset was created using LeRobot.,False,False,1,0,0,pick_and_place,1,1,,False
+pollen-robotics/apple_storage,pollen-robotics,236,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+ninetyone/so100_training_20250102_002,ninetyone,8,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+kelo234/piper_real_test_0121_3,kelo234,228,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+therarelab/so100_pick_place,therarelab,5,2,This dataset was created using LeRobot.,False,False,2,0,0,pick_and_place,2,2,,False
+unitreerobotics/G1_Dex3_BlockStacking_Dataset,unitreerobotics,167,2,This dataset was created using LeRobot. Due to the inability to precisely describe spatial positions  adjust the scene to closely match the first frame of the dataset after installing the hardware as ,False,False,1,0,0,pick_and_place,1,1,,False
+unitreerobotics/G1_Dex1_MountCamera_Dataset,unitreerobotics,132,2,This dataset was created using LeRobot. Due to the inability to precisely describe spatial positions  adjust the scene to closely match the first frame of the dataset after installing the hardware as ,False,False,0,0,0,pick_and_place,0,0,,False
+unitreerobotics/Z1_Dual_Dex1_FoldClothes_Dataset,unitreerobotics,58,2,This dataset was created using LeRobot.,False,False,0,0,2,laundry_folding,2,2,,False
+Loki0929/pi0_ur5,Loki0929,21,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/libero_10_image,lerobot,1016,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+lerobot/libero_object_image,lerobot,762,2,This dataset was created using LeRobot.,False,False,1,0,0,pick_and_place,1,1,,False
+iantc104/robomimic_sim_lift,iantc104,7,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False
+aopolin-lv/libero_spatial_no_noops_lerobot_v21,aopolin-lv,65,2,This dataset was created using LeRobot.,False,False,0,0,0,pick_and_place,0,0,,False

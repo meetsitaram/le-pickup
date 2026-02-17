@@ -1,0 +1,10 @@
+[
+  {
+    "repo_id": "author/dataset-name",
+    "task": "pick_and_place",
+    "quality": "include",
+    "notes": "SO101, 50 episodes, clean.",
+    "converted_path": null,
+    "tags": ["so101", "real"]
+  }
+]

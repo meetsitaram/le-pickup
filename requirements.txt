@@ -1,0 +1,15 @@
+# Solo-models: SO101 LeRobot dataset discovery & curation
+# Python 3.10+
+
+# Hugging Face Hub – list/search datasets
+huggingface_hub>=0.26.0
+
+# LeRobot – load/validate dataset format (v2.1 / v3.0)
+# Uncomment when you start validation/curation:
+# lerobot>=0.4.0
+
+# Data handling & export
+pandas>=2.0.0
+
+# Optional: progress and rich console output
+tqdm>=4.66.0

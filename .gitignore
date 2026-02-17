@@ -1,0 +1,20 @@
+# Virtual environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.cursor/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# State files (can be regenerated)
+*.state.json
+
+# HF cache
+.cache/

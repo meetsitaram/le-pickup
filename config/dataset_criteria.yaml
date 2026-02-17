@@ -1,0 +1,39 @@
+# Good vs bad dataset criteria for SO101 LeRobot curation
+# Used by discovery script and manual review
+
+good:
+  # Format
+  - format: "LeRobot v2.1 or v3.0 (prefer v3 for streaming)"
+  - schema: "Has meta/info.json (v3) or equivalent; state + action + images"
+
+  # Robot (prefer from meta/info.json; dataset name may not contain so101)
+  - robot: "meta/info.json robot_type in so100_follower, so101_follower (or explicitly compatible)"
+  - codebase_version: "v3.0 from meta/info.json"
+  - action_space: "Match SO101 (e.g. 7 dims: 6 joints + gripper) or document mapping"
+
+  # Task
+  - task: "Clearly pick_and_place | pour_liquids | laundry_folding or tagged for mapping"
+  - task_description: "Human-readable task in meta/tasks.jsonl or README"
+
+  # Quality
+  - min_episodes: 10
+  - min_frames_per_episode: 10
+  - "Exclude eval/benchmark/trained-model datasets (use only for author_has_eval signal)"
+  - no_corrupt_files: "Parquet and MP4 load without error"
+  - consistent_fps: "Stable frame rate across episodes"
+
+  # Enrichment (post-curation)
+  - tagging: "Canonical task tag, difficulty, domain (sim/real)"
+
+bad:
+  - "Wrong robot (e.g. PR2, ALOHA only with no SO101 conversion path)"
+  - "Wrong format (not LeRobot; missing state/action or videos)"
+  - "Too few episodes or very short episodes"
+  - "Corrupt or missing shards"
+  - "No task description or ambiguous task"
+  - "Duplicate or near-duplicate of another dataset (merge instead)"
+
+review:
+  - "Manual check: task actually matches (e.g. 'pour' in name but task is pick-only)"
+  - "Manual check: action space matches SO101 or conversion is documented"
+  - "Manual check: lighting/background diversity if from single lab"
