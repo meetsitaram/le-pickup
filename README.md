@@ -1,4 +1,4 @@
-# Solo-models
+# Fine Tuned Models for lerobot so101 arm
 
 Fine-tuned **Pi** and **Groot** foundation models for **SO101** robotic arms, trained on publicly available **LeRobot** datasets. Target tasks: **pick and place**, **pour liquids**, **laundry folding**. Goal: ready-to-load models that anyone can plug into their SO101 arm and run these tasks, reusing hundreds of hours of data from the community.
 
