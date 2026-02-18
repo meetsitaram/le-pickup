@@ -282,50 +282,62 @@ def normalize_dataset(dataset_path: Path, dry_run: bool = True) -> dict:
     result["dropped_dirs"] = dropped_dirs
     
     # 3. Update parquet files (column names referencing cameras)
-    data_dir = dataset_path / "data"
+    # Process both data/ and meta/episodes/ directories
+    parquet_dirs = [dataset_path / "data", dataset_path / "meta" / "episodes"]
     updated_parquets = []
     
-    for parquet_file in data_dir.rglob("*.parquet"):
-        try:
-            df = pd.read_parquet(parquet_file)
-            columns_to_rename = {}
-            columns_to_drop = []
-            
-            for col in df.columns:
-                # Check for drops
-                for drop_key in drops:
-                    if col == drop_key or col.startswith(drop_key + "."):
-                        columns_to_drop.append(col)
-                        break
-                else:
-                    # Check for renames
-                    for old_key, new_key in renames.items():
-                        if col == old_key or col.startswith(old_key + "."):
-                            new_col = col.replace(old_key, new_key, 1)
-                            columns_to_rename[col] = new_col
-                            break
-            
-            if columns_to_rename or columns_to_drop:
-                # Backup
-                backup = parquet_file.with_suffix(".parquet.bak")
-                if not backup.exists():
-                    shutil.copy(parquet_file, backup)
+    for parquet_dir in parquet_dirs:
+        if not parquet_dir.exists():
+            continue
+        for parquet_file in parquet_dir.rglob("*.parquet"):
+            try:
+                df = pd.read_parquet(parquet_file)
+                columns_to_rename = {}
+                columns_to_drop = []
                 
-                if columns_to_drop:
-                    df = df.drop(columns=columns_to_drop, errors='ignore')
-                if columns_to_rename:
-                    df = df.rename(columns=columns_to_rename)
-                df.to_parquet(parquet_file, index=False)
-                updated_parquets.append({
+                for col in df.columns:
+                    # Check for drops
+                    for drop_key in drops:
+                        if col == drop_key or col.startswith(drop_key + "."):
+                            columns_to_drop.append(col)
+                            break
+                    else:
+                        # Check for renames - handle both exact match and prefix match
+                        # For episodes parquet: "videos/observation.images.side/chunk_index" -> "videos/observation.images.cam_external/chunk_index"
+                        # For stats: "stats/observation.images.side/min" -> "stats/observation.images.cam_external/min"
+                        for old_key, new_key in renames.items():
+                            if col == old_key or col.startswith(old_key + ".") or col.startswith(old_key + "/"):
+                                new_col = col.replace(old_key, new_key, 1)
+                                columns_to_rename[col] = new_col
+                                break
+                            # Also handle "videos/old_key/..." and "stats/old_key/..." patterns
+                            for prefix in ["videos/", "stats/"]:
+                                if col.startswith(prefix + old_key + "/"):
+                                    new_col = col.replace(prefix + old_key + "/", prefix + new_key + "/", 1)
+                                    columns_to_rename[col] = new_col
+                                    break
+                
+                if columns_to_rename or columns_to_drop:
+                    # Backup
+                    backup = parquet_file.with_suffix(".parquet.bak")
+                    if not backup.exists():
+                        shutil.copy(parquet_file, backup)
+                    
+                    if columns_to_drop:
+                        df = df.drop(columns=columns_to_drop, errors='ignore')
+                    if columns_to_rename:
+                        df = df.rename(columns=columns_to_rename)
+                    df.to_parquet(parquet_file, index=False)
+                    updated_parquets.append({
+                        "file": str(parquet_file),
+                        "renamed": columns_to_rename,
+                        "dropped": columns_to_drop,
+                    })
+            except Exception as e:
+                result.setdefault("parquet_errors", []).append({
                     "file": str(parquet_file),
-                    "renamed": columns_to_rename,
-                    "dropped": columns_to_drop,
+                    "error": str(e),
                 })
-        except Exception as e:
-            result.setdefault("parquet_errors", []).append({
-                "file": str(parquet_file),
-                "error": str(e),
-            })
     
     result["updated_parquets"] = updated_parquets
     result["status"] = "normalized"
