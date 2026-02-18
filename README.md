@@ -32,10 +32,58 @@ solo-models/
 
 ```bash
 # Create uv env and install (run from project root)
-uv venv
-.venv\Scripts\activate   # Windows
+uv venv .venv
+source .venv/bin/activate   # Linux/Mac
+# .venv\Scripts\activate     # Windows
 uv pip install -r requirements.txt
+```
 
+## Multi-Dataset Training Pipeline
+
+The main script `scripts/main.py` handles the full pipeline:
+
+```bash
+# Check current status
+python scripts/main.py --status
+
+# Full pipeline (download + normalize + train)
+python scripts/main.py --pipeline full
+
+# Prepare datasets for cloud training (download + normalize only)
+python scripts/main.py --pipeline prepare
+
+# Download only
+python scripts/main.py --pipeline download
+
+# Normalize cameras only (datasets already downloaded)
+python scripts/main.py --pipeline normalize
+
+# Train only (datasets already downloaded and normalized)
+python scripts/main.py --pipeline train --policy pi0
+```
+
+### Pipeline stages:
+
+1. **Download**: Fetches community datasets from Hugging Face Hub
+2. **Normalize**: Maps diverse camera names to canonical format (`cam_overhead`, `cam_ego`, `cam_external`)
+3. **Train**: Trains Pi0/ACT/Diffusion Policy on all datasets with task conditioning
+
+### For cloud training:
+
+```bash
+# Prepare locally (download + normalize)
+python scripts/main.py --pipeline prepare
+
+# Upload datasets/ folder to cloud
+rsync -avz datasets/ cloud-server:~/le-pickup/datasets/
+
+# On cloud server, train only
+python scripts/main.py --pipeline train --policy pi0
+```
+
+## Dataset Discovery
+
+```bash
 # Discover LeRobot datasets (writes data/discovery_results.csv)
 python scripts/discover_lerobot_datasets.py
 
@@ -43,7 +91,7 @@ python scripts/discover_lerobot_datasets.py
 python scripts/discover_lerobot_datasets.py --search "so101" --limit 200 --output data/so101_search.csv
 ```
 
-Use the CSV to triage datasets (good / bad / review), then follow **docs/CURATION_PLAN.md** for manual curation and enrichment. Later: validation script (format + episode check) and tagging pipeline; then fine-tuning on Pi/Groot.
+Use the CSV to triage datasets (good / bad / review), then follow **docs/CURATION_PLAN.md** for manual curation and enrichment.
 
 ## Criteria (summary)
 

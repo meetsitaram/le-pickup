@@ -18,3 +18,7 @@ Thumbs.db
 
 # HF cache
 .cache/
+
+# Datasets (large files, downloaded separately)
+datasets/
+datasets_broken_*/
