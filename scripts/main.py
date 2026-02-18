@@ -591,9 +591,9 @@ Examples:
     )
     parser.add_argument(
         "--policy",
-        choices=["pi0", "act", "diffusion"],
-        default="pi0",
-        help="Policy to train",
+        choices=["pi0", "pi05", "groot", "groot_n1.6", "act", "diffusion"],
+        default="pi05",
+        help="Policy to train (pi05=Pi0.5, groot=N1.5, groot_n1.6=N1.6)",
     )
     parser.add_argument(
         "--dry-run",

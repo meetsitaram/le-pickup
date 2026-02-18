@@ -22,20 +22,23 @@ import torch
 
 def load_policy(policy_name: str, config: dict, device: str = "cuda"):
     """Load a policy model based on name."""
+    from lerobot.configs.types import FeatureType, PolicyFeature
     
-    # Get input/output features from config
+    # Get shapes from config
+    cameras = config["dataset"]["cameras"]
+    state_shape = config["policy"]["input_shapes"].get("observation.state", [6])
+    action_shape = config["policy"]["output_shapes"].get("action", [6])
+    
+    # Build input features with proper PolicyFeature objects
     input_features = {}
-    for cam in config["dataset"]["cameras"]:
+    for cam in cameras:
         key = f"observation.images.{cam}"
-        input_features[key] = config["policy"]["input_shapes"].get(
-            key, [3, 480, 640]
-        )
-    input_features["observation.state"] = config["policy"]["input_shapes"].get(
-        "observation.state", [6]
-    )
+        shape = config["policy"]["input_shapes"].get(key, [3, 480, 640])
+        input_features[key] = PolicyFeature(type=FeatureType.VISUAL, shape=shape)
+    input_features["observation.state"] = PolicyFeature(type=FeatureType.STATE, shape=state_shape)
     
     output_features = {
-        "action": config["policy"]["output_shapes"].get("action", [6])
+        "action": PolicyFeature(type=FeatureType.ACTION, shape=action_shape)
     }
     
     if policy_name == "pi0":
@@ -48,8 +51,19 @@ def load_policy(policy_name: str, config: dict, device: str = "cuda"):
             device=device,
         )
         policy = PI0Policy(policy_config)
+    
+    elif policy_name == "pi05" or policy_name == "pi0.5":
+        from lerobot.policies.pi05 import PI05Config, PI05Policy
         
-    elif policy_name == "groot":
+        policy_config = PI05Config(
+            n_obs_steps=1,
+            input_features=input_features,
+            output_features=output_features,
+            device=device,
+        )
+        policy = PI05Policy(policy_config)
+        
+    elif policy_name == "groot" or policy_name == "groot_n1.5":
         from lerobot.policies.groot import GrootConfig, GrootPolicy
         
         policy_config = GrootConfig(
@@ -57,6 +71,19 @@ def load_policy(policy_name: str, config: dict, device: str = "cuda"):
             input_features=input_features,
             output_features=output_features,
             device=device,
+            base_model_path="nvidia/GR00T-N1.5-3B",
+        )
+        policy = GrootPolicy(policy_config)
+    
+    elif policy_name == "groot_n1.6":
+        from lerobot.policies.groot import GrootConfig, GrootPolicy
+        
+        policy_config = GrootConfig(
+            n_obs_steps=1,
+            input_features=input_features,
+            output_features=output_features,
+            device=device,
+            base_model_path="nvidia/GR00T-N1.6-3B",
         )
         policy = GrootPolicy(policy_config)
         
@@ -65,12 +92,9 @@ def load_policy(policy_name: str, config: dict, device: str = "cuda"):
         from lerobot.policies.act.modeling_act import ACTPolicy
         
         policy_config = ACTConfig(
-            input_shapes={
-                **{f"observation.images.{cam}": input_features[f"observation.images.{cam}"] 
-                   for cam in config["dataset"]["cameras"]},
-                "observation.state": input_features["observation.state"],
-            },
-            output_shapes=output_features,
+            input_features=input_features,
+            output_features=output_features,
+            device=device,
         )
         policy = ACTPolicy(policy_config)
         
@@ -79,17 +103,17 @@ def load_policy(policy_name: str, config: dict, device: str = "cuda"):
         from lerobot.policies.diffusion.modeling_diffusion import DiffusionPolicy
         
         policy_config = DiffusionConfig(
-            input_shapes={
-                **{f"observation.images.{cam}": input_features[f"observation.images.{cam}"] 
-                   for cam in config["dataset"]["cameras"]},
-                "observation.state": input_features["observation.state"],
-            },
-            output_shapes=output_features,
+            input_features=input_features,
+            output_features=output_features,
+            device=device,
         )
         policy = DiffusionPolicy(policy_config)
         
     else:
-        raise ValueError(f"Unknown policy: {policy_name}")
+        raise ValueError(
+            f"Unknown policy: {policy_name}. "
+            "Available: pi0, pi05/pi0.5, groot/groot_n1.5, groot_n1.6, act, diffusion"
+        )
     
     return policy.to(device)
 

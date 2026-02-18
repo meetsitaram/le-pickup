@@ -1,15 +1,27 @@
 # SO-101 Multi-Dataset Training Pipeline
 # Python 3.10+
+#
+# INSTALLATION (two steps required for GROOT's flash-attn):
+#   uv pip install torch
+#   uv pip install -r requirements.txt --no-build-isolation
+#
+# Or for CPU-only / without GROOT:
+#   uv pip install -r requirements.txt
 
-# Hugging Face Hub – list/search datasets
+# PyTorch (install separately first if using GROOT)
+torch>=2.0.0
+
+# Hugging Face Hub
 huggingface_hub>=0.26.0
 
-# LeRobot – dataset format, training utilities, includes PyTorch
-lerobot>=0.4.0
+# LeRobot with Pi0/Pi0.5 and GROOT support
+# [pi] = Pi0, Pi0.5 (requires transformers with Gemma)
+# [groot] = GROOT N1.5/N1.6 (requires flash-attn, needs torch pre-installed)
+lerobot[pi,groot]>=0.4.0
 
-# Data handling & export
+# Data handling
 pandas>=2.0.0
 pyarrow>=14.0.0
 
-# Progress and rich console output
+# Progress output
 tqdm>=4.66.0
