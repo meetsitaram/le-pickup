@@ -4,10 +4,10 @@
   "# Total datasets": 15,
   "# Total episodes": 542,
   "# Total frames": 391885,
-  "# Test mode": false,
+  "# Test mode": true,
   "seed": 42,
-  "test_mode": false,
-  "max_batches": null,
+  "test_mode": true,
+  "max_batches": 10,
   "dataset": {
     "type": "multi",
     "paths": [
@@ -64,8 +64,8 @@
     }
   },
   "training": {
-    "batch_size": 32,
-    "epochs": 100,
+    "batch_size": 4,
+    "epochs": 1,
     "learning_rate": 0.0001,
     "weight_decay": 1e-05,
     "grad_clip": 1.0,

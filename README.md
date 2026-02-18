@@ -40,16 +40,17 @@ le-pickup/
 ├── data/                            # Discovery CSVs, dataset manifests
 │   └── author_expansion_cameras.csv # Curated dataset list
 ├── requirements.txt
-├── install.sh                       # Two-step installer for Pi0.5/GROOT
+├── install.sh                       # Installer script (auto-installs uv)
+├── .env                             # Your API tokens (create from template)
 └── README.md
 ```
 
 ## Installation
 
-### Quick Install (with Pi0.5 and GROOT support)
+### Quick Install
 
 ```bash
-# Run the install script (handles two-step installation for flash-attn)
+# Run the install script (auto-installs uv if needed)
 ./install.sh
 ```
 
@@ -61,19 +62,40 @@ uv venv .venv
 source .venv/bin/activate   # Linux/Mac
 # .venv\Scripts\activate     # Windows
 
-# Step 1: Install PyTorch first (required for GROOT's flash-attn)
-uv pip install torch
-
-# Step 2: Install remaining deps with --no-build-isolation
-uv pip install -r requirements.txt --no-build-isolation
+# Install dependencies
+uv pip install -r requirements.txt
 ```
 
-### Lightweight Install (ACT/Diffusion only, no GROOT)
+### Lightweight Install (ACT/Diffusion only)
 
 ```bash
 uv venv .venv && source .venv/bin/activate
 uv pip install lerobot pandas pyarrow tqdm
 ```
+
+## Environment Setup
+
+Create a `.env` file in the project root with your API tokens:
+
+```bash
+cat > .env << 'EOF'
+# Hugging Face token (required for downloading datasets)
+# Get yours at: https://huggingface.co/settings/tokens
+HF_TOKEN=hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Weights & Biases token (optional, for training logging)
+# Get yours at: https://wandb.ai/authorize
+WANDB_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+EOF
+```
+
+Then edit with your actual tokens:
+
+```bash
+nano .env
+```
+
+The `install.sh` script and `main.py` automatically load `.env` — no need to manually export or login.
 
 ## Supported Models
 

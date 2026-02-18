@@ -14,10 +14,10 @@ torch>=2.0.0
 # Hugging Face Hub
 huggingface_hub>=0.26.0
 
-# LeRobot with Pi0/Pi0.5 and GROOT support
-# [pi] = Pi0, Pi0.5 (requires transformers with Gemma)
-# [groot] = GROOT N1.5/N1.6 (requires flash-attn, needs torch pre-installed)
-lerobot[pi,groot]>=0.4.0
+# LeRobot with Pi0/Pi0.5 support (install from git for patched transformers)
+# [pi] = Pi0/Pi0.5 with patched transformers (required for siglip check)
+# [groot] = GROOT N1.5/N1.6 (requires flash-attn - skip if CUDA mismatch)
+lerobot[pi] @ git+https://github.com/huggingface/lerobot.git
 
 # Data handling
 pandas>=2.0.0

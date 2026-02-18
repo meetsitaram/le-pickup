@@ -33,7 +33,9 @@ def load_policy(policy_name: str, config: dict, device: str = "cuda"):
     input_features = {}
     for cam in cameras:
         key = f"observation.images.{cam}"
-        shape = config["policy"]["input_shapes"].get(key, [3, 480, 640])
+        # Pi0.5 expects 224x224 images, ACT/Diffusion can use 480x640
+        default_shape = [3, 224, 224] if policy_name in ["pi0", "pi05", "pi0.5"] else [3, 480, 640]
+        shape = config["policy"]["input_shapes"].get(key, default_shape)
         input_features[key] = PolicyFeature(type=FeatureType.VISUAL, shape=shape)
     input_features["observation.state"] = PolicyFeature(type=FeatureType.STATE, shape=state_shape)
     
@@ -264,6 +266,47 @@ def main():
                         batch_device[k] = v.to(device)
                     else:
                         batch_device[k] = v
+                
+                # Add language tokens for VLA models (Pi0, Pi0.5)
+                if policy_name in ["pi0", "pi05", "pi0.5"]:
+                    from lerobot.utils.constants import OBS_LANGUAGE_TOKENS, OBS_LANGUAGE_ATTENTION_MASK
+                    from transformers import AutoTokenizer
+                    import numpy as np
+                    
+                    # Get or create tokenizer (cached)
+                    if not hasattr(policy, "_cached_tokenizer"):
+                        policy._cached_tokenizer = AutoTokenizer.from_pretrained("google/paligemma-3b-pt-224")
+                    tokenizer = policy._cached_tokenizer
+                    
+                    # Get task descriptions and state from batch
+                    batch_size = batch_device["observation.state"].shape[0]
+                    task_descriptions = batch.get("task_description", ["pick and place"] * batch_size)
+                    if isinstance(task_descriptions, str):
+                        task_descriptions = [task_descriptions] * batch_size
+                    task_descriptions = list(task_descriptions)
+                    
+                    # Format prompts like Pi0.5 expects: "Task: {task}, State: {state};\nAction: "
+                    states = batch_device["observation.state"].cpu().numpy()
+                    # Discretize states into 256 bins (state should be normalized to [-1, 1])
+                    discretized_states = np.clip(np.digitize(states, bins=np.linspace(-1, 1, 257)[:-1]) - 1, 0, 255)
+                    
+                    full_prompts = []
+                    for i, task in enumerate(task_descriptions):
+                        cleaned_text = str(task).strip().replace("_", " ").replace("\n", " ")
+                        state_str = " ".join(map(str, discretized_states[i]))
+                        full_prompt = f"Task: {cleaned_text}, State: {state_str};\nAction: "
+                        full_prompts.append(full_prompt)
+                    
+                    # Tokenize with fixed max_length padding for consistent tensor sizes
+                    encoded = tokenizer(
+                        full_prompts,
+                        padding="max_length",
+                        truncation=True,
+                        max_length=200,
+                        return_tensors="pt",
+                    )
+                    batch_device[OBS_LANGUAGE_TOKENS] = encoded["input_ids"].to(device)
+                    batch_device[OBS_LANGUAGE_ATTENTION_MASK] = encoded["attention_mask"].to(device)
                 
                 # Forward pass
                 optimizer.zero_grad()

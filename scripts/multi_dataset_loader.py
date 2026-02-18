@@ -61,6 +61,8 @@ class DatasetInfo:
     cameras: list[str]
     episode_start_idx: int = 0  # Global episode index start
     frame_start_idx: int = 0    # Global frame index start
+    task_description: str = "pick and place"  # Task description for VLA models
+    tasks: dict[int, str] = field(default_factory=dict)  # task_index -> task description
 
 
 class MultiLeRobotDataset(Dataset):
@@ -126,6 +128,25 @@ class MultiLeRobotDataset(Dataset):
                 if f.startswith("observation.images.")
             ]
             
+            # Load task descriptions from tasks.parquet
+            tasks = {}
+            tasks_path = ds_path / "meta" / "tasks.parquet"
+            if tasks_path.exists():
+                try:
+                    tasks_df = pd.read_parquet(tasks_path)
+                    # Task description is in the index, task_index is the column
+                    for task_desc, row in tasks_df.iterrows():
+                        task_idx = row.get("task_index", 0)
+                        if isinstance(task_desc, str) and task_desc.strip():
+                            tasks[task_idx] = task_desc
+                    if not tasks:
+                        # Fallback: use dataset name as task
+                        tasks[0] = f"pick and place task: {ds_path.name}"
+                except Exception:
+                    tasks[0] = f"pick and place task: {ds_path.name}"
+            else:
+                tasks[0] = f"pick and place task: {ds_path.name}"
+            
             ds_info = DatasetInfo(
                 name=ds_path.name,
                 path=ds_path,
@@ -137,6 +158,7 @@ class MultiLeRobotDataset(Dataset):
                 cameras=cameras,
                 episode_start_idx=episode_offset,
                 frame_start_idx=frame_offset,
+                tasks=tasks,
             )
             
             self.datasets.append(ds_info)
@@ -191,9 +213,17 @@ class MultiLeRobotDataset(Dataset):
         }
         
         # Extract standard fields
-        for field in ["episode_index", "frame_index", "timestamp"]:
+        for field in ["episode_index", "frame_index", "timestamp", "task_index"]:
             if field in row:
                 sample[field] = row[field]
+        
+        # Add task description for VLA models
+        task_idx = sample.get("task_index", 0)
+        if isinstance(task_idx, (int, float)):
+            task_idx = int(task_idx)
+        else:
+            task_idx = 0
+        sample["task_description"] = ds_info.tasks.get(task_idx, ds_info.tasks.get(0, "pick and place"))
         
         # Extract state
         if "observation.state" in ds_data.columns:
@@ -235,12 +265,13 @@ class MultiLeRobotDataset(Dataset):
         This is a placeholder - actual implementation would use decord/cv2
         to extract frames from the video files.
         """
-        # Placeholder: return zeros
+        # Placeholder: return zeros with Pi0.5 expected size (224x224)
         # Real implementation would:
         # 1. Find video file based on episode_index
         # 2. Seek to frame within episode
         # 3. Decode and return tensor
-        return torch.zeros(3, 480, 640, dtype=torch.float32)
+        # Note: Pi0.5 expects 224x224 images for correct vision token count
+        return torch.zeros(3, 224, 224, dtype=torch.float32)
     
     def get_dataset_weights(self, strategy: str = "balanced") -> list[float]:
         """

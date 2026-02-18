@@ -22,10 +22,26 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import time
 from pathlib import Path
 
 from huggingface_hub import snapshot_download
+
+# Load .env if present
+_env_file = Path(__file__).parent.parent / ".env"
+if _env_file.exists():
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(_env_file)
+    except ImportError:
+        # Manual loading if dotenv not installed
+        with open(_env_file) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, value = line.split("=", 1)
+                    os.environ.setdefault(key.strip(), value.strip())
 
 
 # 3-camera configs with top-like + gripper/wrist-like + fixed view
@@ -79,11 +95,12 @@ def download_datasets(
             print(f"  [{i}/{total}] Downloading {repo_id} ({cam_config}, {eps} eps)...", flush=True)
 
             try:
+                hf_token = os.environ.get("HF_TOKEN") or True
                 local_path = snapshot_download(
                     repo_id=repo_id,
                     repo_type="dataset",
                     local_dir=str(output_dir / repo_id.replace("/", "__")),
-                    token=True,
+                    token=hf_token,
                 )
                 downloaded += 1
                 done.add(repo_id)
