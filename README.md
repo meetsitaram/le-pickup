@@ -189,6 +189,7 @@ Based on **391,885 frames** across 15 datasets:
 - **ACT**: Trains from scratch, needs more epochs (100-200)
 - **Early stopping**: Save checkpoints every 5-10 epochs, evaluate on held-out episodes
 - **Quick sanity check**: Run 5 epochs first to validate loss is decreasing
+- **`num_workers=0`**: Use `--num_workers=0` for multi-dataset training. With `num_workers>0`, the DataLoader may crash with `IndexError: Invalid key: 50 is out of bounds for size 50` or `RuntimeError: Trying to resize storage that is not resizable` due to memory-mapped Arrow tensors from HuggingFace datasets conflicting with shared-memory worker processes. Single-threaded loading (`num_workers=0`) avoids this and is still fast enough on GPU.
 
 ```bash
 # Recommended training commands
