@@ -2,8 +2,18 @@
 """
 Multi-dataset training script for SO-101 robot.
 
-This script trains a policy (Pi0, GROOT, ACT, Diffusion) on multiple
-normalized LeRobot datasets.
+This script trains a policy (Pi0.5, Pi0, ACT, Diffusion) on multiple
+normalized LeRobot datasets using the custom multi_dataset_loader.
+
+For Pi0.5, this script handles:
+  - Action chunking (collecting chunk_size consecutive future actions)
+  - Language tokenization via lerobot's preprocessor pipeline
+  - Image resizing (Pi0.5 resizes internally to 224x224)
+
+This is a standalone fallback while the lerobot fork patches
+(https://github.com/meetsitaram/lerobot/tree/feature/multi-dataset-support)
+are being merged upstream. For the preferred approach, use:
+    python scripts/train_lerobot_multi.py --policy.type=pi05
 
 Usage:
     python scripts/train_multi.py --config configs/train_pi0_multi.json
@@ -65,30 +75,6 @@ def load_policy(policy_name: str, config: dict, device: str = "cuda"):
         )
         policy = PI05Policy(policy_config)
         
-    elif policy_name == "groot" or policy_name == "groot_n1.5":
-        from lerobot.policies.groot import GrootConfig, GrootPolicy
-        
-        policy_config = GrootConfig(
-            n_obs_steps=1,
-            input_features=input_features,
-            output_features=output_features,
-            device=device,
-            base_model_path="nvidia/GR00T-N1.5-3B",
-        )
-        policy = GrootPolicy(policy_config)
-    
-    elif policy_name == "groot_n1.6":
-        from lerobot.policies.groot import GrootConfig, GrootPolicy
-        
-        policy_config = GrootConfig(
-            n_obs_steps=1,
-            input_features=input_features,
-            output_features=output_features,
-            device=device,
-            base_model_path="nvidia/GR00T-N1.6-3B",
-        )
-        policy = GrootPolicy(policy_config)
-        
     elif policy_name == "act":
         from lerobot.policies.act.configuration_act import ACTConfig
         from lerobot.policies.act.modeling_act import ACTPolicy
@@ -114,10 +100,79 @@ def load_policy(policy_name: str, config: dict, device: str = "cuda"):
     else:
         raise ValueError(
             f"Unknown policy: {policy_name}. "
-            "Available: pi0, pi05/pi0.5, groot/groot_n1.5, groot_n1.6, act, diffusion"
+            "Available: pi0, pi05/pi0.5, act, diffusion"
         )
     
     return policy.to(device)
+
+
+def setup_pi05_preprocessor(policy):
+    """
+    Create the lerobot preprocessor for Pi0.5.
+    
+    This uses the same processor pipeline as lerobot-train / lerobot-inference,
+    ensuring that tokenization, state formatting, and normalization are
+    consistent between training and deployment.
+    
+    Returns (preprocessor, postprocessor) or (None, None) if unavailable.
+    """
+    try:
+        from lerobot.policies.factory import make_pre_post_processors
+        preprocessor, postprocessor = make_pre_post_processors(
+            policy_cfg=policy.config,
+            dataset_stats=None,  # No normalization stats for custom loader
+        )
+        return preprocessor, postprocessor
+    except Exception as e:
+        print(f"  Warning: Could not create lerobot preprocessor: {e}")
+        print("  Falling back to manual tokenization.")
+        return None, None
+
+
+def tokenize_batch_manual(batch_device, task_descriptions, device):
+    """
+    Manual fallback tokenizer for Pi0.5 when lerobot preprocessor is unavailable.
+    
+    Formats prompts as: "Task: {description}, State: {discretized_state};\\nAction: "
+    then tokenizes with PaliGemma tokenizer (max_length=200, padded).
+    """
+    import numpy as np
+    from transformers import AutoTokenizer
+    from lerobot.utils.constants import OBS_LANGUAGE_TOKENS, OBS_LANGUAGE_ATTENTION_MASK
+
+    tokenizer = tokenize_batch_manual._tokenizer
+    if tokenizer is None:
+        tokenizer = AutoTokenizer.from_pretrained("google/paligemma-3b-pt-224")
+        tokenize_batch_manual._tokenizer = tokenizer
+
+    batch_size = batch_device["observation.state"].shape[0]
+    if isinstance(task_descriptions, str):
+        task_descriptions = [task_descriptions] * batch_size
+    task_descriptions = list(task_descriptions)
+
+    # Format prompts with discretized state
+    states = batch_device["observation.state"].cpu().numpy()
+    discretized = np.clip(
+        np.digitize(states, bins=np.linspace(-1, 1, 257)[:-1]) - 1, 0, 255
+    )
+
+    prompts = []
+    for i, task in enumerate(task_descriptions):
+        text = str(task).strip().replace("_", " ").replace("\n", " ")
+        state_str = " ".join(map(str, discretized[i]))
+        prompts.append(f"Task: {text}, State: {state_str};\nAction: ")
+
+    encoded = tokenizer(
+        prompts,
+        padding="max_length",
+        truncation=True,
+        max_length=200,
+        return_tensors="pt",
+    )
+    batch_device[OBS_LANGUAGE_TOKENS] = encoded["input_ids"].to(device)
+    batch_device[OBS_LANGUAGE_ATTENTION_MASK] = encoded["attention_mask"].to(device)
+
+tokenize_batch_manual._tokenizer = None  # lazy-init cache
 
 
 def main():
@@ -134,6 +189,7 @@ def main():
     test_mode = config.get("test_mode", False)
     max_batches = config.get("max_batches")
     policy_name = config["policy"]["name"]
+    is_pi05 = policy_name in ["pi0", "pi05", "pi0.5"]
     
     # Device selection
     if torch.cuda.is_available():
@@ -157,6 +213,8 @@ def main():
     if max_batches:
         print(f"Max batches: {max_batches} (test mode)")
     print(f"Camera masking: {config['camera_masking']['enabled']}")
+    if is_pi05:
+        print(f"Action chunk size: 50 (Pi0.5 default)")
     print()
     
     # Import training dependencies
@@ -168,12 +226,13 @@ def main():
         print("Make sure you're in the project virtual environment.")
         return 1
     
-    # Load datasets
+    # Load datasets (with action chunking for Pi0.5)
     print("Loading datasets...")
     dataset = MultiLeRobotDataset(
         dataset_paths=config["dataset"]["paths"],
         cameras=config["dataset"]["cameras"],
         load_videos=not test_mode,  # Skip video loading in test mode for speed
+        action_chunk_size=50 if is_pi05 else None,  # Pi0.5 needs 50-step action chunks
     )
     
     # Wrap with camera masking if enabled
@@ -224,6 +283,16 @@ def main():
         else:
             return 1
     
+    # Setup Pi0.5 preprocessor
+    preprocessor = None
+    if is_pi05 and policy is not None:
+        print("Setting up Pi0.5 preprocessor...")
+        preprocessor, _ = setup_pi05_preprocessor(policy)
+        if preprocessor:
+            print("  ✓ Using lerobot preprocessor (compatible with lerobot-inference)")
+        else:
+            print("  ⚠ Using manual tokenization (may differ from inference)")
+    
     print()
     
     # Setup optimizer
@@ -259,7 +328,7 @@ def main():
                 break
             
             if policy is not None:
-                # Move batch to device
+                # Move tensors to device
                 batch_device = {}
                 for k, v in batch.items():
                     if isinstance(v, torch.Tensor):
@@ -268,54 +337,28 @@ def main():
                         batch_device[k] = v
                 
                 # Add language tokens for VLA models (Pi0, Pi0.5)
-                if policy_name in ["pi0", "pi05", "pi0.5"]:
-                    from lerobot.utils.constants import OBS_LANGUAGE_TOKENS, OBS_LANGUAGE_ATTENTION_MASK
-                    from transformers import AutoTokenizer
-                    import numpy as np
-                    
-                    # Get or create tokenizer (cached)
-                    if not hasattr(policy, "_cached_tokenizer"):
-                        policy._cached_tokenizer = AutoTokenizer.from_pretrained("google/paligemma-3b-pt-224")
-                    tokenizer = policy._cached_tokenizer
-                    
-                    # Get task descriptions and state from batch
-                    batch_size = batch_device["observation.state"].shape[0]
-                    task_descriptions = batch.get("task_description", ["pick and place"] * batch_size)
-                    if isinstance(task_descriptions, str):
-                        task_descriptions = [task_descriptions] * batch_size
-                    task_descriptions = list(task_descriptions)
-                    
-                    # Format prompts like Pi0.5 expects: "Task: {task}, State: {state};\nAction: "
-                    states = batch_device["observation.state"].cpu().numpy()
-                    # Discretize states into 256 bins (state should be normalized to [-1, 1])
-                    discretized_states = np.clip(np.digitize(states, bins=np.linspace(-1, 1, 257)[:-1]) - 1, 0, 255)
-                    
-                    full_prompts = []
-                    for i, task in enumerate(task_descriptions):
-                        cleaned_text = str(task).strip().replace("_", " ").replace("\n", " ")
-                        state_str = " ".join(map(str, discretized_states[i]))
-                        full_prompt = f"Task: {cleaned_text}, State: {state_str};\nAction: "
-                        full_prompts.append(full_prompt)
-                    
-                    # Tokenize with fixed max_length padding for consistent tensor sizes
-                    encoded = tokenizer(
-                        full_prompts,
-                        padding="max_length",
-                        truncation=True,
-                        max_length=200,
-                        return_tensors="pt",
-                    )
-                    batch_device[OBS_LANGUAGE_TOKENS] = encoded["input_ids"].to(device)
-                    batch_device[OBS_LANGUAGE_ATTENTION_MASK] = encoded["attention_mask"].to(device)
+                if is_pi05:
+                    if preprocessor:
+                        # Use lerobot preprocessor — same pipeline as lerobot-train
+                        batch_device = preprocessor(batch_device)
+                    else:
+                        # Manual fallback
+                        task_descriptions = batch.get(
+                            "task_description",
+                            ["pick and place"] * batch_device["observation.state"].shape[0],
+                        )
+                        tokenize_batch_manual(batch_device, task_descriptions, device)
                 
                 # Forward pass
                 optimizer.zero_grad()
                 
                 try:
-                    # LeRobot policies expect specific batch format
                     output = policy.forward(batch_device)
                     
-                    if hasattr(output, "loss"):
+                    # Pi0.5 forward returns (loss_scalar, loss_dict)
+                    if isinstance(output, tuple) and len(output) == 2:
+                        loss = output[0]
+                    elif hasattr(output, "loss"):
                         loss = output.loss
                     elif isinstance(output, dict) and "loss" in output:
                         loss = output["loss"]

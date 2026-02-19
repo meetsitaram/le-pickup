@@ -72,7 +72,7 @@ class MultiLeRobotDataset(Dataset):
     Each sample includes:
     - Images from all cameras (normalized to canonical names)
     - Robot state observations
-    - Actions
+    - Actions (optionally chunked for Pi0.5 / flow-matching models)
     - Episode and frame indices
     - Source dataset identifier
     """
@@ -83,6 +83,7 @@ class MultiLeRobotDataset(Dataset):
         cameras: list[str] | None = None,
         load_videos: bool = True,
         transform: Any = None,
+        action_chunk_size: int | None = None,
     ):
         """
         Args:
@@ -90,6 +91,10 @@ class MultiLeRobotDataset(Dataset):
             cameras: List of camera names to load (e.g., ["cam_overhead", "cam_ego"])
             load_videos: Whether to load video frames (set False for metadata-only)
             transform: Optional transform to apply to images
+            action_chunk_size: If set, return this many consecutive future actions
+                per sample (required for Pi0.5 / flow-matching models). Actions
+                are taken from the same episode; the last frames in an episode
+                are padded by repeating the final action.
         """
         if not HAS_TORCH:
             raise ImportError("PyTorch required for MultiLeRobotDataset")
@@ -98,6 +103,7 @@ class MultiLeRobotDataset(Dataset):
         self.cameras = cameras or ["cam_overhead", "cam_ego", "cam_external"]
         self.load_videos = load_videos
         self.transform = transform
+        self.action_chunk_size = action_chunk_size
         
         # Load dataset info and build index
         self.datasets: list[DatasetInfo] = []
@@ -177,6 +183,8 @@ class MultiLeRobotDataset(Dataset):
         """Build index mapping global frame index to (dataset, local_frame)."""
         self._frame_to_dataset: list[tuple[int, int]] = []  # (dataset_idx, local_frame)
         self._data_cache: dict[int, pd.DataFrame] = {}  # dataset_idx -> dataframe
+        # Episode boundaries per dataset: {ds_idx: {ep_idx: (start_local, end_local)}}
+        self._episode_ranges: dict[int, dict[int, tuple[int, int]]] = {}
         
         for ds_idx, ds_info in enumerate(self.datasets):
             # Load parquet data for this dataset
@@ -190,6 +198,13 @@ class MultiLeRobotDataset(Dataset):
             if data_frames:
                 ds_data = pd.concat(data_frames, ignore_index=True)
                 self._data_cache[ds_idx] = ds_data
+                
+                # Build episode boundary index (for action chunking)
+                if "episode_index" in ds_data.columns:
+                    ep_ranges = {}
+                    for ep_idx, group in ds_data.groupby("episode_index"):
+                        ep_ranges[int(ep_idx)] = (group.index[0], group.index[-1])
+                    self._episode_ranges[ds_idx] = ep_ranges
                 
                 # Build frame index
                 for local_idx in range(len(ds_data)):
@@ -233,13 +248,17 @@ class MultiLeRobotDataset(Dataset):
             else:
                 sample["observation.state"] = torch.tensor([state], dtype=torch.float32)
         
-        # Extract action
+        # Extract action (optionally chunked for Pi0.5)
         if "action" in ds_data.columns:
-            action = row["action"]
-            if isinstance(action, np.ndarray):
-                sample["action"] = torch.tensor(action, dtype=torch.float32)
+            if self.action_chunk_size and self.action_chunk_size > 1:
+                # Collect chunk_size consecutive actions from the same episode
+                sample["action"] = self._get_action_chunk(ds_idx, local_idx, ds_data)
             else:
-                sample["action"] = torch.tensor([action], dtype=torch.float32)
+                action = row["action"]
+                if isinstance(action, np.ndarray):
+                    sample["action"] = torch.tensor(action, dtype=torch.float32)
+                else:
+                    sample["action"] = torch.tensor([action], dtype=torch.float32)
         
         # Load images if requested
         if self.load_videos:
@@ -272,6 +291,46 @@ class MultiLeRobotDataset(Dataset):
         # 3. Decode and return tensor
         # Note: Pi0.5 expects 224x224 images for correct vision token count
         return torch.zeros(3, 224, 224, dtype=torch.float32)
+    
+    def _get_action_chunk(
+        self, ds_idx: int, local_idx: int, ds_data: pd.DataFrame
+    ) -> torch.Tensor:
+        """
+        Collect chunk_size consecutive actions from the same episode.
+
+        If fewer than chunk_size future actions remain in the episode,
+        the last action is repeated to fill the chunk.
+
+        Returns:
+            Tensor of shape [chunk_size, action_dim]
+        """
+        chunk_size = self.action_chunk_size
+        row = ds_data.iloc[local_idx]
+
+        # Find episode boundaries
+        ep_idx = int(row.get("episode_index", 0))
+        ep_ranges = self._episode_ranges.get(ds_idx, {})
+        if ep_idx in ep_ranges:
+            _ep_start, ep_end = ep_ranges[ep_idx]
+        else:
+            ep_end = local_idx  # fallback: treat as single-frame episode
+
+        # Collect future actions within the episode
+        actions = []
+        for offset in range(chunk_size):
+            future_idx = local_idx + offset
+            if future_idx <= ep_end:
+                a = ds_data.iloc[future_idx]["action"]
+            else:
+                # Past end of episode: repeat last available action
+                a = ds_data.iloc[ep_end]["action"]
+
+            if isinstance(a, np.ndarray):
+                actions.append(torch.tensor(a, dtype=torch.float32))
+            else:
+                actions.append(torch.tensor([a], dtype=torch.float32))
+
+        return torch.stack(actions, dim=0)  # [chunk_size, action_dim]
     
     def get_dataset_weights(self, strategy: str = "balanced") -> list[float]:
         """

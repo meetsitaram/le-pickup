@@ -1,27 +1,35 @@
 # SO-101 Multi-Dataset Training Pipeline
 # Python 3.10+
 #
-# INSTALLATION (two steps required for GROOT's flash-attn):
-#   uv pip install torch
-#   uv pip install -r requirements.txt --no-build-isolation
+# System dependencies (install BEFORE running pip):
+#   - FFmpeg 4-7  (apt install ffmpeg)     — required by torchcodec for video decoding
+#   - git-lfs     (apt install git-lfs)    — required for pushing models to HF Hub
+#   - CUDA 11.8+  (nvidia drivers)         — recommended for GPU training
 #
-# Or for CPU-only / without GROOT:
+# Install:
+#   ./install.sh              # auto-installs everything
+#   # or manually:
 #   uv pip install -r requirements.txt
 
-# PyTorch (install separately first if using GROOT)
+# PyTorch (CUDA wheels auto-selected by pip/uv)
 torch>=2.0.0
 
 # Hugging Face Hub
 huggingface_hub>=0.26.0
 
-# LeRobot with Pi0/Pi0.5 support (install from git for patched transformers)
-# [pi] = Pi0/Pi0.5 with patched transformers (required for siglip check)git co
-# [groot] = GROOT N1.5/N1.6 (requires flash-attn - skip if CUDA mismatch)
-lerobot[pi] @ git+https://github.com/huggingface/lerobot.git
+# LeRobot with multi-dataset + Pi0.5 support
+# Uses our fork with patches for MultiLeRobotDataset (per-dataset delta_timestamps,
+# CLI list parsing, _from_datasets classmethod).
+# Installed from source tarball to avoid git-lfs issues with the lerobot repo.
+# Once merged upstream, switch back to: lerobot[pi] @ git+https://github.com/huggingface/lerobot.git
+lerobot[pi] @ https://github.com/meetsitaram/lerobot/archive/refs/heads/feature/multi-dataset-support.tar.gz
 
 # Data handling
 pandas>=2.0.0
 pyarrow>=14.0.0
+
+# Environment / config
+python-dotenv>=1.0.0
 
 # Progress output
 tqdm>=4.66.0

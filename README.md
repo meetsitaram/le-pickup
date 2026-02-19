@@ -45,28 +45,62 @@ le-pickup/
 └── README.md
 ```
 
+## Prerequisites
+
+### System Dependencies (outside venv)
+
+These must be installed at the OS level before running `install.sh`:
+
+| Dependency | Required? | Purpose | Install |
+|------------|-----------|---------|---------|
+| **FFmpeg 4–7** | ✅ Yes | Video decoding via `torchcodec` | `apt install ffmpeg` / `brew install ffmpeg` |
+| **git-lfs** | ✅ Yes | Pushing models to Hugging Face Hub | `apt install git-lfs` / `brew install git-lfs` |
+| **NVIDIA GPU + drivers** | ⚠️ Recommended | GPU training (CUDA 11.8+) | [NVIDIA drivers](https://www.nvidia.com/drivers) |
+| **curl** | ✅ Yes | Downloading `uv` installer | Usually pre-installed |
+| **Python 3.10+** | ✅ Yes | Runtime | `apt install python3.10` |
+
+> `install.sh` will try to install FFmpeg and git-lfs automatically, but on locked-down systems you may need to install them manually first.
+
+### Ubuntu / Debian
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ffmpeg git-lfs python3.10 python3.10-venv curl
+git lfs install
+```
+
+### macOS
+
+```bash
+brew install ffmpeg git-lfs python@3.10
+git lfs install
+```
+
 ## Installation
 
 ### Quick Install
 
 ```bash
-# Run the install script (auto-installs uv if needed)
+# Run the install script (installs uv, venv, FFmpeg, git-lfs, Python packages)
 ./install.sh
 ```
 
 ### Manual Installation
 
 ```bash
-# Create virtual environment
+# 1. Install system deps (see Prerequisites above)
+# 2. Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 3. Create virtual environment
 uv venv .venv
 source .venv/bin/activate   # Linux/Mac
-# .venv\Scripts\activate     # Windows
 
-# Install dependencies
+# 4. Install Python packages
 uv pip install -r requirements.txt
 ```
 
-### Lightweight Install (ACT/Diffusion only)
+### Lightweight Install (ACT/Diffusion only — no Pi0.5)
 
 ```bash
 uv venv .venv && source .venv/bin/activate

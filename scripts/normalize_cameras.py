@@ -340,6 +340,45 @@ def normalize_dataset(dataset_path: Path, dry_run: bool = True) -> dict:
                 })
     
     result["updated_parquets"] = updated_parquets
+
+    # 4. Update stats.json (camera keys in statistics)
+    stats_path = dataset_path / "meta" / "stats.json"
+    if stats_path.exists():
+        try:
+            with open(stats_path, encoding="utf-8") as f:
+                stats = json.load(f)
+
+            stats_renames = {}
+            stats_drops = []
+            for key in list(stats.keys()):
+                if key in drops:
+                    stats_drops.append(key)
+                elif key in renames:
+                    stats_renames[key] = renames[key]
+
+            if stats_renames or stats_drops:
+                # Backup
+                stats_backup = stats_path.with_suffix(".json.stats_bak")
+                if not stats_backup.exists():
+                    shutil.copy(stats_path, stats_backup)
+
+                new_stats = {}
+                for k, v in stats.items():
+                    if k in stats_drops:
+                        continue
+                    new_key = stats_renames.get(k, k)
+                    new_stats[new_key] = v
+
+                with open(stats_path, "w", encoding="utf-8") as f:
+                    json.dump(new_stats, f, indent=2)
+
+                result["stats_updated"] = {
+                    "renamed": stats_renames,
+                    "dropped": stats_drops,
+                }
+        except Exception as e:
+            result.setdefault("stats_error", str(e))
+
     result["status"] = "normalized"
     
     return result

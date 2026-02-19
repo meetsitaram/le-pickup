@@ -22,3 +22,15 @@ Thumbs.db
 # Datasets (large files, downloaded separately)
 datasets/
 datasets_broken_*/
+
+# Environment secrets
+.env
+
+# Logs
+*.log
+
+# Training outputs
+outputs/
+
+# Lerobot fork (separate repo)
+lerobot-fork/
