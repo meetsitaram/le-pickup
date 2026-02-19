@@ -4,8 +4,9 @@ Wrapper script to run lerobot-train with multiple local datasets.
 
 This script:
 1. Scans the datasets/ directory for downloaded datasets
-2. Creates symlinks in HF_LEROBOT_HOME so lerobot can find them
-3. Calls lerobot-train with multi-dataset support
+2. Validates each dataset for integrity (episode counts, metadata consistency)
+3. Creates symlinks in HF_LEROBOT_HOME so lerobot can find them
+4. Calls lerobot-train with multi-dataset support (skipping corrupt datasets)
 
 Usage:
     python scripts/train_lerobot_multi.py --policy.type=pi05 [--other lerobot-train args]
@@ -25,9 +26,138 @@ DATASETS_DIR = PROJECT_ROOT / "datasets"
 HF_LEROBOT_HOME = Path(os.environ.get("HF_LEROBOT_HOME", Path.home() / ".cache" / "huggingface" / "lerobot"))
 
 
+def validate_dataset(dataset_path: Path, repo_id: str) -> tuple[bool, list[str]]:
+    """
+    Validate a local LeRobot dataset for integrity.
+
+    Checks:
+    1. meta/info.json exists and is valid JSON
+    2. meta/episodes/ has parquet files
+    3. data/ directory has parquet files
+    4. Episode count in info.json matches metadata parquet row count
+    5. All episode indices in data have corresponding entries in episodes metadata
+    6. No gaps or out-of-range episode indices
+
+    Returns:
+        (is_valid, list_of_issues)
+    """
+    import pandas as pd
+
+    issues = []
+
+    # 1. Check meta/info.json
+    info_path = dataset_path / "meta" / "info.json"
+    if not info_path.exists():
+        return False, [f"Missing meta/info.json"]
+
+    try:
+        with open(info_path) as f:
+            info = json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        return False, [f"Invalid meta/info.json: {e}"]
+
+    total_episodes_info = info.get("total_episodes")
+    total_frames_info = info.get("total_frames")
+
+    if total_episodes_info is None:
+        issues.append("meta/info.json missing 'total_episodes' field")
+    if total_frames_info is None:
+        issues.append("meta/info.json missing 'total_frames' field")
+
+    # 2. Check meta/episodes/ parquet files
+    episodes_dir = dataset_path / "meta" / "episodes"
+    if not episodes_dir.exists():
+        return False, issues + ["Missing meta/episodes/ directory"]
+
+    episode_parquets = sorted(episodes_dir.rglob("*.parquet"))
+    if not episode_parquets:
+        return False, issues + ["No parquet files in meta/episodes/"]
+
+    # Read all episode metadata
+    try:
+        ep_dfs = [pd.read_parquet(pf) for pf in episode_parquets]
+        ep_meta_df = pd.concat(ep_dfs, ignore_index=True)
+    except Exception as e:
+        return False, issues + [f"Failed to read episode metadata: {e}"]
+
+    meta_episode_count = len(ep_meta_df)
+    if "episode_index" not in ep_meta_df.columns:
+        return False, issues + ["Episode metadata missing 'episode_index' column"]
+
+    meta_episode_indices = set(ep_meta_df["episode_index"].tolist())
+
+    # 3. Check data/ parquet files
+    data_dir = dataset_path / "data"
+    if not data_dir.exists():
+        # Some datasets may use videos only, but data dir should exist
+        issues.append("Missing data/ directory")
+
+    data_parquets = sorted(data_dir.rglob("*.parquet")) if data_dir.exists() else []
+    if not data_parquets:
+        issues.append("No parquet files in data/")
+
+    # 4. Check episode indices in data vs metadata
+    if data_parquets:
+        try:
+            data_episode_indices = set()
+            total_data_frames = 0
+            for pf in data_parquets:
+                df = pd.read_parquet(pf, columns=["episode_index"])
+                data_episode_indices.update(int(x) for x in df["episode_index"].unique())
+                total_data_frames += len(df)
+        except Exception as e:
+            issues.append(f"Failed to read data parquets: {e}")
+            data_episode_indices = set()
+            total_data_frames = 0
+
+        # Check for episode indices in data that are missing from metadata
+        missing_in_meta = data_episode_indices - meta_episode_indices
+        if missing_in_meta:
+            issues.append(
+                f"CRITICAL: {len(missing_in_meta)} episode(s) in data but missing from metadata: "
+                f"{sorted(missing_in_meta)[:10]}{'...' if len(missing_in_meta) > 10 else ''}"
+            )
+
+        # Check for episode indices in metadata that have no data
+        missing_in_data = meta_episode_indices - data_episode_indices
+        if missing_in_data:
+            issues.append(
+                f"WARNING: {len(missing_in_data)} episode(s) in metadata but missing from data: "
+                f"{sorted(missing_in_data)[:10]}{'...' if len(missing_in_data) > 10 else ''}"
+            )
+
+        # 5. Check info.json consistency
+        if total_episodes_info is not None:
+            max_ep_idx = max(data_episode_indices) if data_episode_indices else -1
+            if meta_episode_count != total_episodes_info:
+                issues.append(
+                    f"Episode count mismatch: info.json says {total_episodes_info}, "
+                    f"but metadata has {meta_episode_count} entries"
+                )
+            if len(data_episode_indices) != total_episodes_info:
+                issues.append(
+                    f"Data episode count mismatch: info.json says {total_episodes_info} episodes, "
+                    f"but data has {len(data_episode_indices)} unique episode indices "
+                    f"(max index: {max_ep_idx})"
+                )
+
+        if total_frames_info is not None and total_data_frames > 0:
+            if total_data_frames != total_frames_info:
+                issues.append(
+                    f"Frame count mismatch: info.json says {total_frames_info}, "
+                    f"but data has {total_data_frames} frames"
+                )
+
+    # Determine if critical issues exist (data/metadata mismatch = unfixable)
+    critical = any("CRITICAL" in issue for issue in issues)
+    return not critical, issues
+
+
 def get_local_datasets() -> list[str]:
-    """Scan datasets/ directory and return list of repo_ids."""
+    """Scan datasets/ directory, validate each, and return list of valid repo_ids."""
     repo_ids = []
+    skipped = []
+
     if not DATASETS_DIR.exists():
         return repo_ids
 
@@ -43,7 +173,26 @@ def get_local_datasets() -> list[str]:
             repo_id = name.replace("__", "/", 1)
         else:
             repo_id = name
-        repo_ids.append(repo_id)
+
+        # Validate dataset integrity
+        is_valid, issues = validate_dataset(d, repo_id)
+
+        if issues:
+            severity = "SKIPPING" if not is_valid else "WARNING (included)"
+            print(f"\n  [{severity}] {repo_id}:")
+            for issue in issues:
+                print(f"    - {issue}")
+
+        if is_valid:
+            repo_ids.append(repo_id)
+        else:
+            skipped.append((repo_id, issues))
+
+    if skipped:
+        print(f"\n⚠️  Skipped {len(skipped)} corrupt dataset(s):")
+        for repo_id, issues in skipped:
+            print(f"    - {repo_id}: {issues[0]}")
+
     return repo_ids
 
 
