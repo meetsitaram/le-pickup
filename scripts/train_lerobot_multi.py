@@ -125,7 +125,7 @@ def main():
         cmd.append("--log_freq=50")
     # Set a default repo_id for pushing to HF Hub
     if "--policy.repo_id" not in arg_str:
-        cmd.append("--policy.repo_id=meetsitaram/le-pickup-pi05")
+        cmd.append("--policy.repo_id=tinkerbuggy/le-pickup-pi05")
 
     print(f"\nRunning training command:")
     print(f"  {' '.join(cmd)}")
