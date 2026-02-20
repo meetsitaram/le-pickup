@@ -9,12 +9,21 @@ This script:
 4. Calls lerobot-train with multi-dataset support (skipping corrupt datasets)
 
 Usage:
+    # Fresh training:
     python scripts/train_lerobot_multi.py --policy.type=pi05 [--other lerobot-train args]
+
+    # Resume on a new machine (downloads checkpoint from HF Hub first):
+    python scripts/train_lerobot_multi.py --download_checkpoint --resume=true
+
+    # Resume locally (checkpoint already on disk):
+    python scripts/train_lerobot_multi.py \\
+        --config_path=outputs/train/.../train_config.json --resume=true
 """
 import os
 import sys
 import json
 import subprocess
+import shutil
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -227,10 +236,141 @@ def create_symlinks(repo_ids: list[str]) -> None:
         print(f"  Linked: {repo_id} -> {src}")
 
 
+def download_checkpoint(hub_repo_id: str = "tinkerbuggy/le-pickup-pi05",
+                        output_dir: Path = None) -> Path:
+    """
+    Download a checkpoint from Hugging Face Hub for resuming training.
+
+    Downloads the pretrained_model, training_state, and train_config.json
+    into a local output directory structured for lerobot-train --resume.
+
+    Returns the path to the train_config.json for use with --config_path.
+    """
+    from huggingface_hub import HfApi, hf_hub_download, snapshot_download
+
+    if output_dir is None:
+        output_dir = PROJECT_ROOT / "outputs" / "train" / "resumed"
+
+    api = HfApi()
+
+    print(f"\nDownloading checkpoint from {hub_repo_id}...")
+
+    # List files in the repo to find checkpoints
+    try:
+        repo_files = api.list_repo_files(hub_repo_id)
+    except Exception as e:
+        print(f"ERROR: Could not access HF repo '{hub_repo_id}': {e}")
+        sys.exit(1)
+
+    # Check for train_config.json
+    has_train_config = "train_config.json" in repo_files
+
+    # Find the latest checkpoint step (look for files like pretrained_model/*, training_state/*)
+    checkpoint_files = [f for f in repo_files if f.startswith(("pretrained_model/", "training_state/"))]
+    top_level_model_files = [f for f in repo_files if not f.startswith((".", "training_state/")) and
+                             any(f.endswith(ext) for ext in (".safetensors", ".json", ".txt", ".model"))]
+
+    if not checkpoint_files and not top_level_model_files:
+        print(f"ERROR: No model files found in {hub_repo_id}")
+        sys.exit(1)
+
+    # Download to a checkpoint directory
+    checkpoint_dir = output_dir / "checkpoints" / "pretrained"
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
+    print(f"  Downloading model files to {checkpoint_dir}...")
+
+    # Download the entire repo snapshot
+    snapshot_path = snapshot_download(
+        hub_repo_id,
+        local_dir=str(checkpoint_dir),
+        token=os.environ.get("HF_TOKEN"),
+    )
+
+    print(f"  Downloaded to: {snapshot_path}")
+
+    # If there's a train_config.json, move it to the parent output dir
+    config_path = checkpoint_dir / "train_config.json"
+    output_config = output_dir / "train_config.json"
+
+    if config_path.exists():
+        shutil.copy2(str(config_path), str(output_config))
+        print(f"  Config: {output_config}")
+    elif has_train_config:
+        # Download it separately
+        hf_hub_download(
+            hub_repo_id,
+            filename="train_config.json",
+            local_dir=str(output_dir),
+            token=os.environ.get("HF_TOKEN"),
+        )
+        output_config = output_dir / "train_config.json"
+        print(f"  Config: {output_config}")
+    else:
+        print("  WARNING: No train_config.json found in the repo.")
+        print("           You may need to provide training arguments manually.")
+        output_config = None
+
+    # Organize into the structure lerobot expects:
+    #   checkpoints/pretrained/pretrained_model/
+    #   checkpoints/pretrained/training_state/
+    pretrained_model_dir = checkpoint_dir / "pretrained_model"
+    if not pretrained_model_dir.exists():
+        # If files are at the root level, create the pretrained_model subdirectory
+        pretrained_model_dir.mkdir(exist_ok=True)
+        for f in checkpoint_dir.iterdir():
+            if f.is_file() and f.name not in ("train_config.json",):
+                shutil.move(str(f), str(pretrained_model_dir / f.name))
+        print(f"  Organized model files into {pretrained_model_dir}")
+
+    # Update the output_dir in train_config.json to point to our local path
+    if output_config and output_config.exists():
+        try:
+            with open(output_config) as f:
+                config = json.load(f)
+            config["output_dir"] = str(output_dir)
+            with open(output_config, "w") as f:
+                json.dump(config, f, indent=2)
+            print(f"  Updated output_dir in config to: {output_dir}")
+        except Exception as e:
+            print(f"  WARNING: Could not update config output_dir: {e}")
+
+    print(f"\n✅ Checkpoint downloaded successfully!")
+    print(f"   Output dir: {output_dir}")
+    if output_config:
+        print(f"   Config: {output_config}")
+    print()
+
+    return output_config
+
+
 def main():
     print("=" * 60)
     print("MULTI-DATASET LEROBOT TRAINING")
     print("=" * 60)
+
+    # Handle --download_checkpoint flag
+    if "--download_checkpoint" in sys.argv:
+        sys.argv.remove("--download_checkpoint")
+
+        # Check for custom hub repo_id
+        hub_repo_id = "tinkerbuggy/le-pickup-pi05"
+        for arg in sys.argv[1:]:
+            if arg.startswith("--hub_repo_id="):
+                hub_repo_id = arg.split("=", 1)[1]
+                sys.argv.remove(arg)
+                break
+
+        config_path = download_checkpoint(hub_repo_id=hub_repo_id)
+
+        if config_path:
+            # Inject --config_path into args if not already present
+            arg_str = " ".join(sys.argv[1:])
+            if "--config_path" not in arg_str:
+                sys.argv.append(f"--config_path={config_path}")
+            print(f"Continuing to training with --config_path={config_path}")
+        else:
+            print("WARNING: No config found. You may need to specify training args manually.")
 
     # Find local datasets
     repo_ids = get_local_datasets()

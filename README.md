@@ -198,6 +198,47 @@ python scripts/main.py --pipeline train --policy groot_n1.6 --epochs 30 --batch-
 python scripts/main.py --pipeline train --policy act --epochs 100 --batch-size 64
 ```
 
+### Resuming Training on a New Machine
+
+If you've pushed a checkpoint to Hugging Face Hub, you can resume on a fresh machine:
+
+```bash
+# 1. Clone the repo and install
+git clone https://github.com/meetsitaram/le-pickup.git
+cd le-pickup
+cp .env.example .env && nano .env   # add HF_TOKEN and WANDB_API_KEY
+bash install.sh
+
+# 2. Download datasets
+source .venv/bin/activate && source .env
+python scripts/main.py --pipeline download
+python scripts/main.py --pipeline normalize
+
+# 3. Resume training (auto-downloads checkpoint from HF Hub)
+nohup python scripts/train_lerobot_multi.py \
+    --download_checkpoint \
+    --resume=true \
+    --batch_size=32 --save_freq=10000 --num_workers=0 \
+    --dataset.video_backend=pyav \
+    > train.log 2>&1 &
+```
+
+You can also specify a different HF repo:
+
+```bash
+python scripts/train_lerobot_multi.py \
+    --download_checkpoint --hub_repo_id=tinkerbuggy/le-pickup-pi05 \
+    --resume=true
+```
+
+Or if the checkpoint is already on disk (e.g., copied via `rsync`/`scp`):
+
+```bash
+python scripts/train_lerobot_multi.py \
+    --config_path=outputs/train/.../train_config.json \
+    --resume=true
+```
+
 ### For cloud training:
 
 ```bash
