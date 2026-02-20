@@ -260,21 +260,29 @@ def main():
         f"--dataset.repo_id={repo_id_json}",
     ] + extra_args
 
-    # Add defaults if not specified
+    # Add defaults if not specified (skip when resuming with --config_path,
+    # since the saved config already has all settings)
     arg_str = " ".join(extra_args)
-    if "--policy.type" not in arg_str:
-        cmd.append("--policy.type=pi05")
-    if "--batch_size" not in arg_str:
-        cmd.append("--batch_size=4")
-    if "--steps" not in arg_str:
-        cmd.append("--steps=50000")
-    if "--save_freq" not in arg_str:
-        cmd.append("--save_freq=5000")
-    if "--log_freq" not in arg_str:
-        cmd.append("--log_freq=50")
-    # Set a default repo_id for pushing to HF Hub
-    if "--policy.repo_id" not in arg_str:
-        cmd.append("--policy.repo_id=tinkerbuggy/le-pickup-pi05")
+    is_resuming = "--config_path" in arg_str
+
+    if not is_resuming:
+        if "--policy.type" not in arg_str:
+            cmd.append("--policy.type=pi05")
+        if "--batch_size" not in arg_str:
+            cmd.append("--batch_size=4")
+        if "--steps" not in arg_str:
+            cmd.append("--steps=50000")
+        if "--save_freq" not in arg_str:
+            cmd.append("--save_freq=5000")
+        if "--log_freq" not in arg_str:
+            cmd.append("--log_freq=50")
+        # Set a default repo_id for pushing to HF Hub
+        if "--policy.repo_id" not in arg_str:
+            cmd.append("--policy.repo_id=tinkerbuggy/le-pickup-pi05")
+
+    # Always disable WandB artifact upload (multi-dataset names break artifact naming)
+    if "--wandb.disable_artifact" not in arg_str:
+        cmd.append("--wandb.disable_artifact=true")
 
     print(f"\nRunning training command:")
     print(f"  {' '.join(cmd)}")
