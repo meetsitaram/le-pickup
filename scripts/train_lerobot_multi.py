@@ -408,6 +408,10 @@ def main():
     if not is_resuming:
         if "--policy.type" not in arg_str:
             cmd.append("--policy.type=pi05")
+        # Lerobot defaults to float32 and gradient_checkpointing=false,
+        # which wastes ~8 GB VRAM on the 3.6B param Pi0.5 model. bf16 halves
+        # parameter memory; gradient checkpointing trades recompute for ~2.5 GB
+        # savings on activation memory. Both are critical for consumer GPUs.
         if "--policy.dtype" not in arg_str:
             cmd.append("--policy.dtype=bfloat16")
         if "--policy.gradient_checkpointing" not in arg_str:
