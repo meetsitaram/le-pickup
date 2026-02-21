@@ -198,6 +198,65 @@ python scripts/main.py --pipeline train --policy groot_n1.6 --epochs 30 --batch-
 python scripts/main.py --pipeline train --policy act --epochs 100 --batch-size 64
 ```
 
+### GPU Memory Requirements
+
+Pi0.5 is a 3B+ parameter model. VRAM requirements vary significantly depending on which parameters are trainable:
+
+| Configuration | Trainable Params | VRAM (bs=4) | VRAM (bs=8) | VRAM (bs=16) |
+|--------------|-----------------|-------------|-------------|--------------|
+| All params (default) | 3.6B | ~38 GB | ~40 GB | ~44 GB |
+| `freeze_vision_encoder=true` | ~2.3B | ~30 GB | ~32 GB | ~36 GB |
+| `train_expert_only=true` | ~693M | ~20 GB | ~24 GB | ~29 GB |
+
+**Understanding Pi0.5's architecture:**
+
+Pi0.5 has three main components, each serving a different role:
+
+| Component | Params | Role |
+|-----------|--------|------|
+| **SigLIP vision encoder** | ~400M | Converts camera images into visual features. Pretrained on millions of images — already knows how to see objects, colors, and spatial relationships. |
+| **Gemma language model** | ~2B | Processes task instructions (e.g., "pick up the orange") and reasons about the visual scene. Pretrained on massive text/vision corpora. |
+| **Gemma action expert** | ~300M | Maps vision+language features to motor commands (joint positions for the SO-101 arm). This is the robotics-specific component. |
+
+With `train_expert_only=true`, the vision encoder and language model are frozen — they still run during the forward pass but their weights don't update. Only the action expert learns. This is the recommended approach for consumer GPUs because:
+
+1. **Memory**: Optimizer states (AdamW momentum + variance) are only stored for 693M params instead of 3.6B, saving ~20 GB of VRAM.
+2. **Quality**: The pretrained vision and language components already understand "pick up the orange and place it in the bin" out of the box. What needs task-specific training is the action expert — *how* to move the SO-101 arm to execute that instruction.
+3. **Overfitting risk**: Fine-tuning the full 3.6B model on 542 episodes risks overfitting the vision/language backbone to the training data. Freezing them preserves their general capabilities.
+
+If you previously ran full fine-tuning (e.g., 20k steps on an A100), switching to `train_expert_only=true` preserves whatever the vision encoder and language model learned during those steps while continuing to refine the action expert.
+
+**Critical flags for Pi0.5 training:**
+
+- **`--policy.gradient_checkpointing=true`**: **Must be set explicitly** when using `--policy.pretrained_path` (without `--config_path`). The default is `false`, which stores all intermediate activations and uses ~30 GB regardless of batch size or freezing. This flag alone is the difference between fitting in VRAM or not.
+- **`--policy.train_expert_only=true`**: Freezes the SigLIP vision encoder and Gemma language model, trains only the 300M action expert. Required for GPUs with ≤32 GB VRAM.
+- **`--policy.freeze_vision_encoder=true`**: Freezes only the vision encoder (~400M params), keeps the language model and action expert trainable. A middle ground — may fit on 32 GB at batch_size=4 but tight.
+
+**Consumer GPU tips (RTX 3090/4090/5090, 24-32 GB):**
+
+```bash
+# RTX 5090 (32 GB) — train expert only
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+python scripts/train_lerobot_multi.py \
+    --policy.pretrained_path=outputs/train/resumed/checkpoints/pretrained \
+    --policy.train_expert_only=true \
+    --policy.gradient_checkpointing=true \
+    --batch_size=16 --save_freq=10000 --num_workers=4 \
+    --dataset.video_backend=pyav
+
+# RTX 4090/3090 (24 GB) — train expert only, smaller batch
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+python scripts/train_lerobot_multi.py \
+    --policy.pretrained_path=outputs/train/resumed/checkpoints/pretrained \
+    --policy.train_expert_only=true \
+    --policy.gradient_checkpointing=true \
+    --batch_size=4 --save_freq=10000 --num_workers=4 \
+    --dataset.video_backend=pyav
+```
+
+- **`PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`**: Reduces CUDA memory fragmentation. Can recover 500+ MB of wasted VRAM.
+- **Desktop GPU overhead**: Xorg, GNOME, and desktop apps consume 500-800 MB of VRAM. For maximum memory, train via SSH with the display manager stopped (`sudo systemctl stop gdm3`).
+
 ### Resuming Training on a New Machine
 
 If you've pushed a checkpoint to Hugging Face Hub, you can resume on a fresh machine:
@@ -213,14 +272,66 @@ bash install.sh
 source .venv/bin/activate && source .env
 python scripts/main.py --pipeline download
 python scripts/main.py --pipeline normalize
+```
 
-# 3. Resume training (auto-downloads checkpoint from HF Hub)
+#### Option A: Download checkpoint with wget (recommended)
+
+The HuggingFace Python downloader can stall silently on large files (no read timeout).
+Use `wget` for reliable downloads with automatic retry:
+
+```bash
+# 3a. Download checkpoint via wget (resilient to network stalls)
+mkdir -p outputs/train/resumed/checkpoints/pretrained
+wget -c --tries=0 --timeout=30 --waitretry=5 --read-timeout=30 \
+    --header="Authorization: Bearer $HF_TOKEN" \
+    -O outputs/train/resumed/checkpoints/pretrained/model.safetensors \
+    "https://huggingface.co/tinkerbuggy/le-pickup-pi05/resolve/main/model.safetensors"
+
+# Download remaining config/processor files
+for f in config.json train_config.json policy_preprocessor.json \
+         policy_preprocessor_step_2_normalizer_processor.safetensors \
+         policy_postprocessor.json \
+         policy_postprocessor_step_0_unnormalizer_processor.safetensors; do
+    wget -c --tries=0 --timeout=30 --read-timeout=30 \
+        --header="Authorization: Bearer $HF_TOKEN" \
+        -O "outputs/train/resumed/checkpoints/pretrained/$f" \
+        "https://huggingface.co/tinkerbuggy/le-pickup-pi05/resolve/main/$f"
+done
+
+# 4a. Resume training from downloaded checkpoint
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+PYTHONUNBUFFERED=1 nohup python scripts/train_lerobot_multi.py \
+    --policy.pretrained_path=outputs/train/resumed/checkpoints/pretrained \
+    --policy.train_expert_only=true \
+    --policy.gradient_checkpointing=true \
+    --batch_size=8 --save_freq=10000 --num_workers=4 \
+    --steps=130000 --dataset.video_backend=pyav \
+    > train.log 2>&1 &
+```
+
+#### Option B: Use `--download_checkpoint` (A100 / cloud only)
+
+This uses the HuggingFace Python downloader, which requires `--resume=true` and a
+`training_state/` directory. Better suited for cloud GPUs with ample VRAM:
+
+```bash
+# 3b. Auto-download and resume (needs training_state in checkpoint)
 nohup python scripts/train_lerobot_multi.py \
     --download_checkpoint \
     --resume=true \
     --batch_size=32 --save_freq=10000 --num_workers=0 \
     --dataset.video_backend=pyav \
     > train.log 2>&1 &
+```
+
+#### Verify checkpoint loaded correctly
+
+Check that the initial loss is low (~0.05-0.5). A from-scratch model starts at loss ~5-10+:
+
+```bash
+grep "loss" train.log | head -3
+# ✓ Good: step:50 ... loss:0.054
+# ✗ Bad:  step:50 ... loss:7.230  (loaded from scratch, not checkpoint)
 ```
 
 You can also specify a different HF repo:
