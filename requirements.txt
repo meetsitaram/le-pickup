@@ -16,13 +16,14 @@ torch>=2.0.0
 
 # Hugging Face Hub
 huggingface_hub>=0.26.0
+hf_xet
 
 # LeRobot with multi-dataset + Pi0.5 support
 # Uses our fork with patches for MultiLeRobotDataset (per-dataset delta_timestamps,
 # CLI list parsing, _from_datasets classmethod).
 # Installed from source tarball to avoid git-lfs issues with the lerobot repo.
 # Once merged upstream, switch back to: lerobot[pi] @ git+https://github.com/huggingface/lerobot.git
-lerobot[pi] @ https://github.com/meetsitaram/lerobot/archive/refs/heads/feature/multi-dataset-support.tar.gz
+lerobot[pi,feetech] @ https://github.com/meetsitaram/lerobot/archive/refs/heads/feature/multi-dataset-support.tar.gz
 
 # Data handling
 pandas>=2.0.0
