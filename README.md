@@ -229,6 +229,7 @@ If you previously ran full fine-tuning (e.g., 20k steps on an A100), switching t
 **Critical flags for Pi0.5 training:**
 
 - **`--policy.gradient_checkpointing=true`**: **Must be set explicitly** when using `--policy.pretrained_path` (without `--config_path`). The default is `false`, which stores all intermediate activations and uses ~30 GB regardless of batch size or freezing. This flag alone is the difference between fitting in VRAM or not.
+- **`--policy.dtype=bfloat16`**: **Must be set explicitly.** The default is `float32`, which doubles the memory for model weights (14 GB vs 7 GB). The saved checkpoint config has `dtype: "bfloat16"`, but when using `--policy.pretrained_path` the default config is used instead. Omitting this wastes ~2.5 GB of VRAM on frozen parameters stored in fp32 unnecessarily.
 - **`--policy.train_expert_only=true`**: Freezes the SigLIP vision encoder and Gemma language model, trains only the 300M action expert. Required for GPUs with ≤32 GB VRAM.
 - **`--policy.freeze_vision_encoder=true`**: Freezes only the vision encoder (~400M params), keeps the language model and action expert trainable. A middle ground — may fit on 32 GB at batch_size=4 but tight.
 
@@ -241,6 +242,7 @@ python scripts/train_lerobot_multi.py \
     --policy.pretrained_path=outputs/train/resumed/checkpoints/pretrained \
     --policy.train_expert_only=true \
     --policy.gradient_checkpointing=true \
+    --policy.dtype=bfloat16 \
     --batch_size=16 --save_freq=10000 --num_workers=4 \
     --dataset.video_backend=pyav
 
@@ -250,6 +252,7 @@ python scripts/train_lerobot_multi.py \
     --policy.pretrained_path=outputs/train/resumed/checkpoints/pretrained \
     --policy.train_expert_only=true \
     --policy.gradient_checkpointing=true \
+    --policy.dtype=bfloat16 \
     --batch_size=4 --save_freq=10000 --num_workers=4 \
     --dataset.video_backend=pyav
 ```
@@ -304,6 +307,7 @@ PYTHONUNBUFFERED=1 nohup python scripts/train_lerobot_multi.py \
     --policy.pretrained_path=outputs/train/resumed/checkpoints/pretrained \
     --policy.train_expert_only=true \
     --policy.gradient_checkpointing=true \
+    --policy.dtype=bfloat16 \
     --batch_size=8 --save_freq=10000 --num_workers=4 \
     --steps=130000 --dataset.video_backend=pyav \
     > train.log 2>&1 &

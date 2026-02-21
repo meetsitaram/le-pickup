@@ -408,6 +408,10 @@ def main():
     if not is_resuming:
         if "--policy.type" not in arg_str:
             cmd.append("--policy.type=pi05")
+        if "--policy.dtype" not in arg_str:
+            cmd.append("--policy.dtype=bfloat16")
+        if "--policy.gradient_checkpointing" not in arg_str:
+            cmd.append("--policy.gradient_checkpointing=true")
         if "--batch_size" not in arg_str:
             cmd.append("--batch_size=4")
         if "--steps" not in arg_str:
@@ -416,7 +420,6 @@ def main():
             cmd.append("--save_freq=5000")
         if "--log_freq" not in arg_str:
             cmd.append("--log_freq=50")
-        # Set a default repo_id for pushing to HF Hub
         if "--policy.repo_id" not in arg_str:
             cmd.append("--policy.repo_id=tinkerbuggy/le-pickup-pi05")
 
