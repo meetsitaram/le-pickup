@@ -391,14 +391,40 @@ def main():
     # Build repo_id list as JSON for CLI
     repo_id_json = json.dumps(repo_ids)
 
-    # Build lerobot-train command
-    # Pass through any extra arguments from CLI
+    # Handle --num_gpus flag for multi-GPU training via accelerate
+    num_gpus = 1
     extra_args = sys.argv[1:]
+    filtered_args = []
+    for arg in extra_args:
+        if arg.startswith("--num_gpus="):
+            num_gpus = int(arg.split("=", 1)[1])
+        elif arg == "--num_gpus":
+            pass  # value will be in next arg, handled below
+        else:
+            filtered_args.append(arg)
+    # Handle --num_gpus N (space-separated)
+    for i, arg in enumerate(sys.argv[1:]):
+        if arg == "--num_gpus" and i + 1 < len(sys.argv[1:]):
+            num_gpus = int(sys.argv[i + 2])
+            if sys.argv[i + 2] in filtered_args:
+                filtered_args.remove(sys.argv[i + 2])
+    extra_args = filtered_args
 
-    cmd = [
-        sys.executable, "-m", "lerobot.scripts.lerobot_train",
-        f"--dataset.repo_id={repo_id_json}",
-    ] + extra_args
+    # Build lerobot-train command
+    if num_gpus > 1:
+        cmd = [
+            sys.executable, "-m", "accelerate.commands.launch",
+            "--num_processes", str(num_gpus),
+            "--multi_gpu",
+            "--mixed_precision", "bf16",
+            "-m", "lerobot.scripts.lerobot_train",
+            f"--dataset.repo_id={repo_id_json}",
+        ] + extra_args
+    else:
+        cmd = [
+            sys.executable, "-m", "lerobot.scripts.lerobot_train",
+            f"--dataset.repo_id={repo_id_json}",
+        ] + extra_args
 
     # Add defaults if not specified (skip when resuming with --config_path,
     # since the saved config already has all settings)
